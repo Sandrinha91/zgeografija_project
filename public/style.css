@@ -1,0 +1,82 @@
+.bg-image {
+    background: url('bg_img.jpg') no-repeat center center;
+    object-fit: cover;
+    margin-top: 57px;
+    height: 36vh;
+}
+.logo-pic{
+  width: 45px;
+}
+.fame-icon {
+  border: 1px solid black;
+  border-radius: 50%;
+  font-size: 23px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 700;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  color: rgb(255, 255, 255);
+  background-color: rgb(52,58,64) !important;
+}
+.nav-tabs {
+  border: 0px !important;
+}
+#quiz-tab, #info-tab, #profiles-tab {
+  color: rgb(255, 255, 255);
+}
+#home-tab, #profile-tab, #messages-tab {
+  color: rgb(52,58,64);
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  color: rgb(255, 255, 255) !important;
+}
+
+
+@media (max-width: 992px) {
+    .mobileMenu {
+      -webkit-transform: translateX(-100%);
+              transform: translateX(-100%);
+      position: fixed;
+      top: 0px;
+      bottom: 0;
+      margin: auto;
+      left: 0;
+      -webkit-transition: all ease 0.25s;
+      transition: all ease 0.25s;
+    }
+    .mobileMenu.open {
+      -webkit-transform: translateX(0%);
+              transform: translateX(0%);
+    }
+    .mobileMenu .navbar-nav {
+      overflow-y: auto;
+    }
+    /* .nav-link:active {
+        background-color: rgb(52,58,64) !important;
+    } */
+    .overlay {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+    }
+    .overlay.open {
+      display: block;
+      z-index: 1029;
+    }
+    .navSmallScreen {
+      width: 43%;
+    }
+    .navSmallScreenDir {
+      flex-direction: column;
+    }
+    .gold-cup{
+      width:50% !important;
+      margin-top: 2em  !important;
+    }
+  }

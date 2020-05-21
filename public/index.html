@@ -1,0 +1,222 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Zanimljiva Geografija | Quiz</title>
+</head>
+<body>
+    
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-sm-start fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 mr-auto" href="#"><img src="logo.gif" alt="" class='logo-pic'> Zanimljiva Geografija</a>
+        <button class="navbar-toggler align-self-start" type="button">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+          class="navSmallScreen collapse navbar-collapse bg-dark p-3 p-lg-0 mt-5 mt-lg-0 d-flex flex-column flex-lg-row flex-xl-row justify-content-lg-end mobileMenu"
+          id="navbarSupportedContent">
+          <ul class="align-self-stretch nav nav-tabs navSmallScreenDir" id="myTabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link" id="quiz-tab" data-toggle="tab" href="#quiz" role="tab" aria-controls="quiz" aria-selected="false"><i class="fas fa-play-circle"></i> Kviz <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true"><i class="fas fa-info-circle"></i> 
+                Dodatno
+              </a>
+              <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div> -->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="profiles-tab" data-toggle="tab" href="#profiles" role="tab" aria-controls="profiles" aria-selected="false"><i class="fas fa-user-secret"></i>
+                Profil
+              </a>
+              <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div> -->
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0 align-self-stretch">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
+            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+          </form> -->
+        </div>
+      </div>
+    </nav>
+
+    <!-- overlay menu small screen -->
+    <div class="overlay"></div>
+
+    <!-- image section -->
+    <div  class='bg-image'></div>
+
+    <div class="tab-content">
+        <!-- QUIZ PAGE -->
+        <div class="tab-pane" id="quiz" role="tabpanel" aria-labelledby="quiz-tab">Stranica za kviz</div>
+
+        <!-- ADITIONAL OVERVIEW  -->
+        <div class="tab-pane active row" id="info" role="tabpanel" aria-labelledby="info-tab">
+            <!-- NAV TABS -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                    aria-selected="false">Predloži pojam</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                        aria-selected="true">Rang lista</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages"
+                        aria-selected="false">Lista 2</a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings"
+                        aria-selected="false">Settings</a>
+                </li> -->
+            </ul>
+            
+            <!-- SUGGEST CONTENT SECTION -->
+            <div class="tab-content">
+                <div class="tab-pane row" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="card col-lg-7 col-lg-8 col-md-10 col-sm-12 mx-auto mt-5 text-center">
+                        <!-- <img src="..." class="card-img-top" alt="..."> -->
+                        <div class='card-header'>
+                            <h5>Predloži pojam</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-title">Izaberite kategoriju</p>
+                            <form id='formSuggestTerm'>
+                                <select class="form-control" id='selectSuggestCategory'>
+                                    <option>Država</option>
+                                    <option>Grad</option>
+                                    <option>Reka</option>
+                                    <option>Planina</option>
+                                    <option>Životinja</option>
+                                    <option>Biljka</option>
+                                    <option>Predmet</option>
+                                </select>
+                                <p class="card-title">Unesite pojam</p>
+                                <input class="form-control mt-2" id='suggestedTerm' type="text">
+                                <input type="submit" value="Potvrdi" id="btnSuggestTerm" class="btn btn-info form-control mt-2">
+                            </form>
+                            <div id="divTermError"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RANG LIST -->
+                <div class="tab-pane active row" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+                  <!-- RANG LIST CARD -->
+                  <div class="card mb-3 mt-3 col-xl-10 col-lg-10 col-md-10 col-sm-12 mx-auto">
+                    <div class='card-header text-center'>
+                      <h3>Dvorana slavnih</h3>
+                    </div>
+                    <div class="row no-gutters">
+                      <div class="col-md-4 d-flex">
+                        <img src="gold_cup.png" class="card-img w-75 m-auto gold-cup" alt="...">
+                      </div>
+                      <div class="col-md-8">
+                        <div class="card-body">
+                          <h5 class="card-title"></h5>
+                          <ul id='rangList' class="list-group">
+
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+
+                <!-- LIST 2 -->
+                <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">RANG LISTA 2</div>
+            </div>
+        </div>
+
+        <!-- MY PROFILE / UPDATE PROFILE SECTION -->
+        <div class="tab-pane" id="profiles" role="tabpanel" aria-labelledby="profiles-tab">
+            <div class='row text-center mt-5'>
+                <!-- my profile page -->
+                <div class="card col-lg-6 col-lg-6 col-md-5 col-sm-12">
+                    <div class='card-header'>
+                        <h5>Moj profil</h5>
+                    </div>
+                    <img src="avatar.png" class="card-img-top mt-2" alt="Avatar" style='width:150px;margin:auto'>
+                    <div class="card-body">
+                    <h5 class="card-title" id='usernameContainer'></h5>
+                    <h5 class="card-title" id='usernamePosition'>Rang:</h5>
+                    </div>
+                </div>
+                <!-- username update form -->
+                <div class="card col-lg-6 col-lg-6 col-md-7 col-sm-12">
+                    <div class='card-header'>
+                        <h5>Promeni korisničko ime</h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Korisničko ime:</h5>
+                        <form id="formUpdateUsername"  class='row mb-3'>
+                            <div class='col-12'>
+                                <input type="text" name="inputUsername" id="inputUsername" class='form-control mt-2'>
+                            </div>
+                        <div class="col-12">
+                                <input type="submit" value="Izmeni" id="btnUpdateUsername" class="btn btn-info form-control mt-3">
+                        </div>
+                        </form>
+                        <div id="divUpdatedUsername" class=' mt-3'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  <!-- DATABASE CONECTION -->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-firestore.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+      https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyCfLpVOLlGp7Url62AkPHAhqeANf2ZHrkA",
+      authDomain: "zgeografija-60c19.firebaseapp.com",
+      databaseURL: "https://zgeografija-60c19.firebaseio.com",
+      projectId: "zgeografija-60c19",
+      storageBucket: "zgeografija-60c19.appspot.com",
+      messagingSenderId: "185096705732",
+      appId: "1:185096705732:web:22c5bb4cd7dd908ac21b91"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    let db = firebase.firestore();
+  </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    <script src='app.js' type='module'></script>
+
+</body>
+</html>
