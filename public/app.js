@@ -131,20 +131,24 @@ formSuggestTerm.addEventListener( 'submit', e =>{
         if( toLowerCase.slice(0,2) == "Nj" || toLowerCase.slice(0,2) == "Lj" || toLowerCase.slice(0,2) == "Dž" || toLowerCase.slice(0,2) == "nj" || toLowerCase.slice(0,2) == "lj" || toLowerCase.slice(0,2) == "dž" ){
           var firstLetter = toLowerCase.slice(0,2);
           firstLetter = firstLetter[0].toUpperCase() + firstLetter[1];
+          var nameCapitalized = firstLetter + toLowerCase.slice(2);
           console.log(firstLetter);
+          console.log(nameCapitalized);
         }else {
           var firstLetter = toLowerCase.slice(0,2);
           console.log(firstLetter);
           firstLetter = firstLetter.toUpperCase();
+          var nameCapitalized = firstLetter + toLowerCase.slice(1);
         }
 
-        let nameCapitalized = firstLetter + toLowerCase.slice(1);
-        
         qi.isUnique(nameCapitalized,selecteSuggestCategory.value,  data => {
             if ( data ) {
-                
+                if( localStorage.username !== false ){
                 qi.insertTerm(selecteSuggestCategory.value,nameCapitalized,firstLetter);
                 divTermError.innerHTML = `<span class='alert alert-success mt-2'>Pojam: ${sugestedTrim} je uspešno dodat!</span>`;
+                } else {
+                  divTermError.innerHTML = `<span class='alert alert-success mt-2'>Samo ulogovani korisnici mogu predložiti pojam!</span>`;
+                }
                 disapearAfter(divTermError);
                 formSuggestTerm.reset();
                 

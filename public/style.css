@@ -32,6 +32,11 @@
   color: rgb(255, 255, 255) !important;
 }
 
+.me{
+  border: 5px solid rgba(248, 212, 5, 0.897) !important;
+  border-radius: 10px;
+}
+
 
 @media (max-width: 992px) {
     .mobileMenu {
