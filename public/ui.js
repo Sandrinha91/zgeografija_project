@@ -15,7 +15,7 @@ export class QuizUI{
     }
 
     //make li rang list template
-    templateRangLI(doc){
+    templateRangLI(doc, usernamePosition){
         
         let counter = 1;
 
@@ -25,19 +25,24 @@ export class QuizUI{
                 if( e[0] == localStorage.username ){
                     rangLI.classList.add('me', "list-group-item", "d-flex", "justify-content-between", "align-items-center");
                     localStorage.setItem('listPosition',counter);
+                    usernamePosition.innerText += ` ${localStorage.listPosition}`;
                 }
 
                 rangLI.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
     
-                // let spanUser = document.createElement("SPAN");
                 if( counter <= 3 ){
                     rangLI.innerHTML = `<span><img src='${counter}.png' style="width:40px;height:40px;"></span><b> ${e[0]} </b> <span class="badge badge-info badge-pill">${e[1]}</span>`;
                 }else if (counter <=5){
                     rangLI.innerHTML = `<span class='fame-icon'>${counter}</span><b> ${e[0]} </b> <span class="badge badge-info badge-pill">${e[1]}</span>`;
                 }
-            
                 this.list.appendChild(rangLI);
-                // rangLI.appendChild(spanUser);
+                counter++;
+            }else{
+                if(e[0] == localStorage.username){
+                    localStorage.setItem('listPosition',counter);
+                    usernamePosition.innerHTML += `${counter}`;
+                    //usernamePosition.innerText += ` ${localStorage.listPosition}`;
+                }
                 counter++;
             }
         });

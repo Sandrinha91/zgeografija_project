@@ -5,6 +5,8 @@ export class Quiz{
       this.username = u;
       this.terms = db.collection('pojmovi');
       this.users = [];
+      this.valResult;
+      this.firstLetter;
   }
 
   set username(u){
@@ -13,7 +15,15 @@ export class Quiz{
 
   set users(ua){
     this._users = ua;
-}
+  }
+
+  set validResult(vr){
+    this._valResult = vr;
+  }
+
+  set putFirstLetter(vr){
+    this._firstLetter = vr;
+  }
 
   //geteri
   get username(){
@@ -22,7 +32,15 @@ export class Quiz{
 
   get users(){
     return this._users;
-}
+  }
+
+  get validResult(){
+    return this._valResult;
+  }
+
+  get retFirstLetter(){
+    return this._firstLetter;
+  }
 
   //promena korisnickog imena
   updateUsername(newUsername){
@@ -30,9 +48,72 @@ export class Quiz{
     localStorage.setItem('username',newUsername);
   }
 
+  //STRING CONVERSION
+  stringConvert(string){
+    let toLowerCase = string.toLowerCase();
+
+    if( toLowerCase.slice(0,2) == "Nj" || toLowerCase.slice(0,2) == "Lj" || toLowerCase.slice(0,2) == "Dž" || toLowerCase.slice(0,2) == "nj" || toLowerCase.slice(0,2) == "lj" || toLowerCase.slice(0,2) == "dž" ){
+      let slicedLetters = toLowerCase.slice(0,2).toLowerCase();
+      let final = slicedLetters[0].toUpperCase() + slicedLetters[1];
+      return final;
+    }else {
+      let final = toLowerCase[0].toUpperCase();
+      return final;
+    }
+  }
+
+   //capitalizeFirstLetter
+   capitalizeLetterTerm(string){
+    let firstLetter = string.slice(0,1).toUpperCase();
+    let restWord = string.slice(1).toLowerCase();
+    let finalWord = firstLetter + restWord;
+    return finalWord;
+  }
+
+  //input validation
+  inputValidation(string,div,form){
+    const regexp = /^[0-9]*[A-Za-z\šđčžćŠĐŽČĆ]+$/;
+    console.log(string);
+    if( string.length == 0 ){
+      div.innerHTML = "<span class='alert alert-warning  mt-2'>Morate uneti pojam!</span>";
+      form.reset();
+      return false;
+    }else if( !regexp.test(string) ){
+      div.innerHTML = "<span class='alert alert-warning  mt-2'>Pojam ne sme sadržati specijalne karaktere!</span>";
+      form.reset();
+      return false;
+    } else{
+      return true;
+    }
+  }
+
+  //insert new term in db
+  async insertTerm(category, termSuggested) {
+    let dateTmp = new Date(); 
+    let term = this.capitalizeLetterTerm(termSuggested);
+    let firstLetter = this.stringConvert(termSuggested);
+    console.log("TU", term);
+
+    let data = {
+        kategorija: category,
+        korisnik: this._username,
+        pocetnoSlovo: firstLetter,
+        pojam:term,
+        vreme: firebase.firestore.Timestamp.fromDate(dateTmp)
+    };
+  
+    let response = await this.terms.add(data);
+    return response;
+    // let setDoc = this.terms.doc().set(data);
+    // return setDoc.then(res => {
+    //   console.log('Set: ', res);
+    // });
+  }
+
   //check if term is confirmed
-  isUnique(term,category,callback) {
+  isUnique(termSuggested,category,callback) {
     let x = true;
+    let term = this.capitalizeLetterTerm(termSuggested);
     this.terms.where("pojam", "==", term)
               .where("kategorija", "==", category)
               .get()
@@ -49,24 +130,7 @@ export class Quiz{
               });
   }
 
-  //insert new term in db
-  insertTerm(category, term, firstLetter) {
-      let dateTmp = new Date(); 
-      let data = {
-          kategorija: category,
-          korisnik: this.username,
-          pocetnoSlovo: firstLetter,
-          pojam:term,
-          vreme: firebase.firestore.Timestamp.fromDate(dateTmp)
-      };
-    
-      let setDoc = this.terms.doc().set(data);
-      return setDoc.then(res => {
-        console.log('Set: ', res);
-      });
-  }
-
-  //get all username
+  
   //check if term is confirmed
   getAllUsers( callback ) {
     
@@ -74,17 +138,33 @@ export class Quiz{
               .get()
               .then( snapshot => {
                 snapshot.docs.forEach( change =>{  
-
-                  this.users.push(change.data().korisnik);
-                  
+                    //dodaj novu poruku jer je doslo do izmene
+                    this.users.push(change.data().korisnik);
+                    
                 });
                 callback(this.users);
               })
               .catch( error => {
                 console.log(error);
               });
-  }
 
+    
+    // this.terms.orderBy('korisnik').onSnapshot
+    //           (querySnapshot => {
+    //             querySnapshot.docChanges().forEach(change => {
+    //                 console.log('New city: ', change.doc.data().korisnik);
+    //                 this.users.push(change.doc.data().korisnik);
+    //                 // console.log(typeof(this.users));
+    //                 callback(this.users);
+    //               });
+    //             }); 
+
+    }
+
+              
+             
+                
+                
   
 }
 

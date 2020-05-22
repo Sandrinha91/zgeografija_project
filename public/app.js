@@ -12,7 +12,9 @@ let formUpdateUsername = document.querySelector('#formUpdateUsername');
 let divUpdatedUsername = document.querySelector('#divUpdatedUsername');
 let selecteSuggestCategory = document.querySelector('#selectSuggestCategory');
 let rangList = document.querySelector('#rangList');
-let profilesTab = document.querySelector('#profiles-tab');
+let profilesTab = document.querySelector('#navContentUser');
+let reloadForList = document.querySelector('#profile-tab');
+
 
 let username = () => {
     if( localStorage.username ){
@@ -22,7 +24,23 @@ let username = () => {
     }
 }
 
-profilesTab.innerHTML += ` ( ${localStorage.username} )`;
+// let string = 'njeMacKa';
+// let firstLetter = string.slice(0,1).toUpperCase();
+//     let restWord = string.slice(1).toLowerCase();
+//     let finalWord =firstLetter + restWord;
+//    console.log(finalWord);
+
+
+// let toLowerCase = 'njemacka';
+// let slicedLetters = toLowerCase.slice(0,2).toLowerCase();
+// let finalLetter = slicedLetters[0].toUpperCase() + slicedLetters[1]; 
+
+// console.log(slicedLetters);
+// console.log(finalLetter);
+// console.log(slicedLetters[0].toUpperCase());
+//       firstLetters[0].toUpperCase();
+//   let firstLetter = ;
+// console.log(string.slice(0,2).toUpperCase(1));
 
 let disapearAfter = (div) => {
   setTimeout( () => {
@@ -30,13 +48,6 @@ let disapearAfter = (div) => {
     div.innerText="";
   },3000);
 }
-
-let qi = new Quiz(username());
-
-usernameContainer.innerHTML = `${localStorage.username}`;
-usernamePosition.innerText += ` ${localStorage.listPosition}`;
-inputUsername.setAttribute('value', `${localStorage.username}`);
-
 
 //succesfull login
 const Toast = Swal.mixin({
@@ -51,7 +62,6 @@ const Toast = Swal.mixin({
     }
   })
   
-
 // if usernmame not true sweetalert ON
 if( !username() ){
     Swal.fire({
@@ -76,7 +86,10 @@ if( !username() ){
             
         }else{
             localStorage.setItem('username',result.value);
-
+            profilesTab.innerHTML = ` ( ${localStorage.username} )`;
+            inputUsername.setAttribute('value', `${localStorage.username}`);
+            usernameContainer.innerHTML = `${localStorage.username}`;
+            
             Swal.fire({
                 title: `Dobrodošli ${result.value}!`,
                 }).then( () => {
@@ -87,7 +100,17 @@ if( !username() ){
                 });
         }
       })
+} else {
+  profilesTab.innerHTML = ` ( ${localStorage.username} )`;
+  inputUsername.setAttribute('value', `${localStorage.username}`);
+  usernameContainer.innerHTML = `${localStorage.username}`;
 }
+
+// reloadForList.addEventListener('click', e =>{
+//   location.reload();
+// });
+
+let qi = new Quiz(username());
 
 // update username iz input polja
 formUpdateUsername.addEventListener('submit', e => {
@@ -102,6 +125,7 @@ formUpdateUsername.addEventListener('submit', e => {
         divUpdatedUsername.innerHTML = `<span class='alert alert-success'>Vaše korisničko ime je promenjeno u <b>${newUsername}</b></span>`;
         usernameContainer.innerHTML = `${localStorage.username}`;
         inputUsername.setAttribute('value', `${localStorage.username}`);
+        profilesTab.innerHTML = ` ( ${localStorage.username} )`;
         formUpdateUsername.reset();
         // setTimeout(() => divUpdatedUsername.innerText="", 3000);
         disapearAfter(divUpdatedUsername);
@@ -112,40 +136,19 @@ formUpdateUsername.addEventListener('submit', e => {
 formSuggestTerm.addEventListener( 'submit', e =>{
     e.preventDefault();
     
-    const regexp = /^[a-zA-Z\wšđčćžŠĐĆČŽ]*$/;
     let sugestedTrim = suggestedTerm.value.replace(/ /g,'');
+    let category = selecteSuggestCategory.value;
 
-    if( sugestedTrim.length == 0 ){
-        divTermError.innerHTML = "<span class='alert alert-warning  mt-2'>Morate uneti pojam!</span>";
-        formSuggestTerm.reset();
-        disapearAfter(divTermError);
-    } else if( !(regexp.test(sugestedTrim) ) ){
-        divTermError.innerHTML = "<span class='alert alert-warning  mt-2'>Pojam ne sme sadržati specijalne karaktere!</span>";
-        formSuggestTerm.reset();
-        disapearAfter(divTermError);
-    }else{
-        let toLowerCase = sugestedTrim.toLowerCase();
-        // let firstLetter = toLowerCase.charAt(0).toUpperCase();
-        console.log(toLowerCase.slice(0,2));
-        
-        if( toLowerCase.slice(0,2) == "Nj" || toLowerCase.slice(0,2) == "Lj" || toLowerCase.slice(0,2) == "Dž" || toLowerCase.slice(0,2) == "nj" || toLowerCase.slice(0,2) == "lj" || toLowerCase.slice(0,2) == "dž" ){
-          var firstLetter = toLowerCase.slice(0,2);
-          firstLetter = firstLetter[0].toUpperCase() + firstLetter[1];
-          var nameCapitalized = firstLetter + toLowerCase.slice(2);
-          console.log(firstLetter);
-          console.log(nameCapitalized);
-        }else {
-          var firstLetter = toLowerCase.slice(0,2);
-          console.log(firstLetter);
-          firstLetter = firstLetter.toUpperCase();
-          var nameCapitalized = firstLetter + toLowerCase.slice(1);
-        }
-
-        qi.isUnique(nameCapitalized,selecteSuggestCategory.value,  data => {
+    let result = qi.inputValidation(sugestedTrim,divTermError,formSuggestTerm);
+    disapearAfter(divTermError);
+    
+    if( result !== false && result !== undefined && result !== null ) {
+        qi.isUnique( sugestedTrim, category ,  data => {
             if ( data ) {
-                if( localStorage.username !== false ){
-                qi.insertTerm(selecteSuggestCategory.value,nameCapitalized,firstLetter);
-                divTermError.innerHTML = `<span class='alert alert-success mt-2'>Pojam: ${sugestedTrim} je uspešno dodat!</span>`;
+                if( localStorage.username !== false && localStorage.username !== undefined && localStorage.username !== null ){
+                  qi.insertTerm( category, sugestedTrim);
+                  divTermError.innerHTML = `<span class='alert alert-success mt-2'>Pojam: ${sugestedTrim} je uspešno dodat!</span>`;
+                  rangList.refresh();
                 } else {
                   divTermError.innerHTML = `<span class='alert alert-success mt-2'>Samo ulogovani korisnici mogu predložiti pojam!</span>`;
                 }
@@ -164,44 +167,46 @@ formSuggestTerm.addEventListener( 'submit', e =>{
 let rangListTemplate = new QuizUI(rangList);
 
 // take all users , sort them and display first 5
-qi.getAllUsers( data => {
+
+
+  qi.getAllUsers( data => {
   
-  let username = data[0];
-  let counter = 0;
-  let rangListArray = [];
-  let lastChild = data.length;
-
-  // filter users
-  for ( let i = 0; i <= data.length; i++) {
-    if(username == data[i]){
-      counter++;
-    } else if ( username != data[i] ) {
-      if ( i == lastChild ) {
-        rangListArray.push([username,counter]);
-        counter = 0;
-      }
-      else {
-        rangListArray.push([username,counter]);
-        counter = 1;
-        username = data[i];
-      }
-    } 
-  }
-
-  // array sort
-  let  finalSort = rangListArray.sort(function(a, b) {
-    return b[1] - a[1];
+    let username = data[0];
+    let counter = 0;
+    let rangListArray = [];
+    let lastChild = data.length;
+  
+    // filter users
+    for ( let i = 0; i <= data.length; i++) {
+      if(username == data[i]){
+        counter++;
+      } else if ( username != data[i] ) {
+        if ( i == lastChild ) {
+          rangListArray.push([username,counter]);
+          counter = 0;
+        }
+        else {
+          rangListArray.push([username,counter]);
+          counter = 1;
+          username = data[i];
+        }
+      } 
+    }
+  
+    // array sort
+    let  finalSort = rangListArray.sort(function(a, b) {
+      return b[1] - a[1];
+    });
+  
+    // finalSort.forEach(e => {
+    //   console.log(e);
+    // });
+    
+    // make html list template
+    rangListTemplate.templateRangLI(finalSort, usernamePosition);
+  
   });
 
-  // finalSort.forEach(e => {
-  //   console.log(e);
-  // });
-  
-  // make html list template
-  rangListTemplate.templateRangLI(finalSort);
-
-  
-});
 
 // menu responsive
 $(document).ready(function() {
@@ -222,3 +227,5 @@ $(document).ready(function() {
     $('.mobileMenu, .overlay').toggleClass('open');
   });
 });
+
+// console.log(qi.username);
