@@ -1,3 +1,17 @@
+$(document).ready(function() {
+  if (location.hash) {
+      $("a[href='" + location.hash + "']").tab("show");
+  }
+  $(document.body).on("click", "a[data-toggle='tab']", function(event) {
+      location.hash = this.getAttribute("href");
+  });
+});
+$(window).on("popstate", function() {
+  var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+  $("a[href='" + anchor + "']").tab("show");
+});
+
+
 import {Quiz} from "./quiz.js";
 import {QuizUI} from "./ui.js";
 
@@ -13,7 +27,8 @@ let divUpdatedUsername = document.querySelector('#divUpdatedUsername');
 let selecteSuggestCategory = document.querySelector('#selectSuggestCategory');
 let rangList = document.querySelector('#rangList');
 let profilesTab = document.querySelector('#navContentUser');
-let reloadForList = document.querySelector('#profile-tab');
+// let profilesTab1 = document.querySelector('#profile-tab');
+
 
 
 let username = () => {
@@ -110,6 +125,7 @@ if( !username() ){
 //   location.reload();
 // });
 
+//ovo mora da se prekopira u else iznad
 let qi = new Quiz(username());
 
 // update username iz input polja
@@ -129,6 +145,7 @@ formUpdateUsername.addEventListener('submit', e => {
         formUpdateUsername.reset();
         // setTimeout(() => divUpdatedUsername.innerText="", 3000);
         disapearAfter(divUpdatedUsername);
+        location.reload();
     }
 });
 
@@ -148,7 +165,7 @@ formSuggestTerm.addEventListener( 'submit', e =>{
                 if( localStorage.username !== false && localStorage.username !== undefined && localStorage.username !== null ){
                   qi.insertTerm( category, sugestedTrim);
                   divTermError.innerHTML = `<span class='alert alert-success mt-2'>Pojam: ${sugestedTrim} je uspešno dodat!</span>`;
-                  rangList.refresh();
+                  location.reload();
                 } else {
                   divTermError.innerHTML = `<span class='alert alert-success mt-2'>Samo ulogovani korisnici mogu predložiti pojam!</span>`;
                 }
