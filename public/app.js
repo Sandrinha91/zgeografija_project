@@ -9,6 +9,7 @@ $(document).ready(function() {
 $(window).on("popstate", function() {
   var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
   $("a[href='" + anchor + "']").tab("show");
+  $("a[href='" + location.hash + "']").tab("show");
 });
 
 
@@ -27,8 +28,13 @@ let divUpdatedUsername = document.querySelector('#divUpdatedUsername');
 let selecteSuggestCategory = document.querySelector('#selectSuggestCategory');
 let rangList = document.querySelector('#rangList');
 let profilesTab = document.querySelector('#navContentUser');
+let loader = document.querySelector('.loader1');
+let logOut = document.querySelector('#logOut');
+let blurTable = document.querySelector('#blur');
+// let globus = document.getElementsByClassName('globus');
+let refreshListBtn = document.querySelector('#refreshBtn');
 // let profilesTab1 = document.querySelector('#profile-tab');
-
+let rangListTemplate = new QuizUI(rangList);
 
 
 let username = () => {
@@ -39,29 +45,48 @@ let username = () => {
     }
 }
 
-// let string = 'njeMacKa';
-// let firstLetter = string.slice(0,1).toUpperCase();
-//     let restWord = string.slice(1).toLowerCase();
-//     let finalWord =firstLetter + restWord;
-//    console.log(finalWord);
-
-
-// let toLowerCase = 'njemacka';
-// let slicedLetters = toLowerCase.slice(0,2).toLowerCase();
-// let finalLetter = slicedLetters[0].toUpperCase() + slicedLetters[1]; 
-
-// console.log(slicedLetters);
-// console.log(finalLetter);
-// console.log(slicedLetters[0].toUpperCase());
-//       firstLetters[0].toUpperCase();
-//   let firstLetter = ;
-// console.log(string.slice(0,2).toUpperCase(1));
-
+// TIMER FOR DISAPEAR DIV
 let disapearAfter = (div) => {
   setTimeout( () => {
     // div.classList.add('d-none');
     div.innerText="";
   },3000);
+}
+
+// take all users , sort them and display first 5
+let makeRangList = (qi) => {
+  qi.getAllUsers( data => {
+    let username = data[0];
+    let counter = 0;
+    let rangListArray = [];
+    let lastChild = data.length;
+  
+    // filter users
+    for ( let i = 0; i <= data.length; i++) {
+      if(username == data[i]){
+        counter++;
+      } else if ( username != data[i] ) {
+        if ( i == lastChild ) {
+          rangListArray.push([username,counter]);
+          counter = 0;
+        }
+        else {
+          rangListArray.push([username,counter]);
+          counter = 1;
+          username = data[i];
+        }
+      } 
+    }
+  
+    // array sort
+    let  finalSort = rangListArray.sort(function(a, b) {
+      return b[1] - a[1];
+    });
+  
+    // make html list template
+    rangListTemplate.templateRangLI(finalSort, usernamePosition);
+  
+  });
 }
 
 //succesfull login
@@ -94,16 +119,14 @@ if( !username() ){
                 icon: 'warning',
                 allowOutsideClick: false,
                 showConfirmButton: false,
-                });
-            setTimeout( () => {
-                location.reload();
-            },1500);
-            
+                }); 
         }else{
             localStorage.setItem('username',result.value);
             profilesTab.innerHTML = ` ( ${localStorage.username} )`;
             inputUsername.setAttribute('value', `${localStorage.username}`);
             usernameContainer.innerHTML = `${localStorage.username}`;
+            var qi = new Quiz(username());
+            makeRangList(qi);
             
             Swal.fire({
                 title: `Dobrodošli ${result.value}!`,
@@ -112,6 +135,10 @@ if( !username() ){
                         icon: 'success',
                         title: 'Uspešno logovanje!'
                       });
+                      // setTimeout(function() {
+                        // location.reload();
+                        // reload-comm
+                      // }, 300);
                 });
         }
       })
@@ -119,6 +146,8 @@ if( !username() ){
   profilesTab.innerHTML = ` ( ${localStorage.username} )`;
   inputUsername.setAttribute('value', `${localStorage.username}`);
   usernameContainer.innerHTML = `${localStorage.username}`;
+  var qi = new Quiz(username());
+  //makeRangList(qi1);
 }
 
 // reloadForList.addEventListener('click', e =>{
@@ -126,7 +155,7 @@ if( !username() ){
 // });
 
 //ovo mora da se prekopira u else iznad
-let qi = new Quiz(username());
+//let qi = new Quiz(username());
 
 // update username iz input polja
 formUpdateUsername.addEventListener('submit', e => {
@@ -143,9 +172,7 @@ formUpdateUsername.addEventListener('submit', e => {
         inputUsername.setAttribute('value', `${localStorage.username}`);
         profilesTab.innerHTML = ` ( ${localStorage.username} )`;
         formUpdateUsername.reset();
-        // setTimeout(() => divUpdatedUsername.innerText="", 3000);
         disapearAfter(divUpdatedUsername);
-        location.reload();
     }
 });
 
@@ -165,12 +192,13 @@ formSuggestTerm.addEventListener( 'submit', e =>{
                 if( localStorage.username !== false && localStorage.username !== undefined && localStorage.username !== null ){
                   qi.insertTerm( category, sugestedTrim);
                   divTermError.innerHTML = `<span class='alert alert-success mt-2'>Pojam: ${sugestedTrim} je uspešno dodat!</span>`;
-                  location.reload();
+                  loader.style.display = "block";
+                  blurTable.classList.add('blur');
                 } else {
                   divTermError.innerHTML = `<span class='alert alert-success mt-2'>Samo ulogovani korisnici mogu predložiti pojam!</span>`;
                 }
                 disapearAfter(divTermError);
-                formSuggestTerm.reset();
+                //formSuggestTerm.reset();
                 
             } else {
                 divTermError.innerHTML = `<span class='alert alert-warning mt-2'>Pojam: ${sugestedTrim} je već unet!</span>`;
@@ -181,49 +209,12 @@ formSuggestTerm.addEventListener( 'submit', e =>{
     }
 });
 
-let rangListTemplate = new QuizUI(rangList);
+refreshListBtn.addEventListener('click', () =>{
+  location.reload();
+  loader.style.display = "none";
+  blurTable.classList.remove('blur');
 
-// take all users , sort them and display first 5
-
-
-  qi.getAllUsers( data => {
-  
-    let username = data[0];
-    let counter = 0;
-    let rangListArray = [];
-    let lastChild = data.length;
-  
-    // filter users
-    for ( let i = 0; i <= data.length; i++) {
-      if(username == data[i]){
-        counter++;
-      } else if ( username != data[i] ) {
-        if ( i == lastChild ) {
-          rangListArray.push([username,counter]);
-          counter = 0;
-        }
-        else {
-          rangListArray.push([username,counter]);
-          counter = 1;
-          username = data[i];
-        }
-      } 
-    }
-  
-    // array sort
-    let  finalSort = rangListArray.sort(function(a, b) {
-      return b[1] - a[1];
-    });
-  
-    // finalSort.forEach(e => {
-    //   console.log(e);
-    // });
-    
-    // make html list template
-    rangListTemplate.templateRangLI(finalSort, usernamePosition);
-  
-  });
-
+});
 
 // menu responsive
 $(document).ready(function() {
@@ -246,3 +237,124 @@ $(document).ready(function() {
 });
 
 // console.log(qi.username);
+// logOut.addEventListener("click", callback ,true) 
+//         function callback () {
+//             localStorage.clear();
+//             return false;
+//         }
+
+// LOG OUT USER AND CLEAR LOCAL STORAGE ON CLICK
+logOut.addEventListener("click", () => {
+  localStorage.clear();
+});
+
+// QUIZ TIME
+
+let startGame = document.querySelector("#startGame");
+let timer = document.querySelector("#timer");
+let gameContent = document.querySelector("#gameContent");
+let submitGame = document.querySelector("#submitGame");
+let country = document.querySelector("#country");
+let city = document.querySelector("#city");
+let river = document.querySelector("#river");
+let mountain = document.querySelector("#mountain");
+let animal = document.querySelector("#animal");
+let plant = document.querySelector("#plant");
+let objectInput = document.querySelector("#objectInput");
+let firstLetter = document.querySelector("#firstLetter");
+let counter = 10;
+let clock;
+let clockIsSet = false;
+let alpha = "ABCČĆDDžĐEFGHIJKLLjMNNjOPRSŠTUVZŽ".split('');
+let arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
+
+//console.log(alpha);
+
+function checkData(givenLetter){
+  //console.log(river.value);
+  //console.log(river.value);
+  //console.log('bbbbbbbbbbbbbbbbbb');
+
+  let countryFinal = country.value.replace(/ /g,'');
+  let cityFinal = city.value.replace(/ /g,'');
+  let riverFinal = city.value.replace(/ /g,'');
+  let mountainFinal = mountain.value.replace(/ /g,'');
+  let animalFinal = animal.value.replace(/ /g,'');
+  let plantFinal = plant.value.replace(/ /g,'');
+  let objectInputFinal = objectInput.value.replace(/ /g,'');
+
+  //console.log(givenLetter);
+  //, [cityFinal, 'grad']
+  let arrayAnswers = [ [countryFinal, 'drzava'] ];
+  arrayAnswers.forEach( e => {
+    console.log(e[0].charAt(0).toUpperCase(), e[1]);
+  });
+
+  arrayAnswers.forEach( e => {
+    console.log(givenLetter);
+      qi1.ifAnswerExist( e[0], e[1] , givenLetter , data => { 
+        if(data){
+          console.log(data);
+        }
+       });
+    
+  });
+
+  // input check if empty
+  //qi1.ifExist
+
+}
+
+submitGame.addEventListener('submit' , e => {
+  e.preventDefault();
+  clearInterval(clock);
+  clockIsSet = false;
+  timer.classList.remove('timer');
+  timer.innerHTML = '';
+  checkData();
+});
+  
+startGame.addEventListener('click', () => {
+  gameContent.classList.remove('d-none');
+  const randomElement = arrayLetters[Math.floor(Math.random() * arrayLetters.length)];
+  firstLetter.innerHTML = `${randomElement}`;
+  console.log(randomElement);
+  //let givenLetter = randomElement;
+
+  if(!clockIsSet) {
+      clockIsSet = true;
+      timer.classList.add('timer');
+      timer.innerHTML = counter;
+      clock = setInterval(() => {
+          console.log(randomElement);
+          let givenLetter = randomElement;
+          counter--;
+          
+          if( counter == 0 ){
+            clearInterval(clock);
+            clockIsSet = false;
+            checkData(givenLetter);
+            //ovde da se pozove naredna funkcija koja ce da ispituje polja i odradi validaciju
+          }
+          
+          timer.innerHTML = counter;
+      }, 1000);
+  }
+
+  
+
+
+});
+
+
+// qi.getDataTest( e => {
+//   letters.forEach( e => {
+//       qi1.ifAnswerExist( e[0], e[1] , givenLetter , data => { 
+//         if(data){
+//           console.log(data);
+//         }
+//        });
+    
+//   });
+// });
+

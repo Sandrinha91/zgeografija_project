@@ -2,7 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"> 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <link rel="stylesheet" href="style.css">
     <title>Zanimljiva Geografija | Quiz</title>
@@ -22,10 +23,10 @@
           id="navbarSupportedContent">
           <ul class="align-self-stretch nav nav-tabs navSmallScreenDir" id="myTabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link" id="quiz-tab" data-toggle="tab" href="#quiz" role="tab" aria-controls="quiz" aria-selected="false"><i class="fas fa-play-circle"></i> Kviz <span class="sr-only">(current)</span></a>
+              <a class="nav-link active" id="quiz-tab" data-toggle="tab" href="#quiz" role="tab" aria-controls="quiz" aria-selected="false"><i class="fas fa-play-circle"></i> Kviz <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true"><i class="fas fa-info-circle"></i> 
+              <a class="nav-link" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true"><i class="fas fa-info-circle"></i> 
                 Dodatno
               </a>
               <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -36,8 +37,8 @@
               </div> -->
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="profiles-tab" data-toggle="tab" href="#profiles" role="tab" aria-controls="profiles" aria-selected="false"><i class="fas fa-user-secret"></i>
-                Profil<span id='navContentUser'></span>
+              <a class="nav-link" id="profiles-tab" data-toggle="tab" href="#profiles" role="tab" aria-controls="profiles" aria-selected="false"><span><i class="fas fa-user-secret"></i>&nbsp;Profil</span>
+                <span id='navContentUser'></span>
               </a>
               <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="#">Action</a>
@@ -66,22 +67,139 @@
 
     <div class="tab-content">
         <!-- QUIZ PAGE -->
-        <div class="tab-pane" id="quiz" role="tabpanel" aria-labelledby="quiz-tab">Stranica za kviz</div>
+        <div class="tab-pane active row" id="quiz" role="tabpanel" aria-labelledby="quiz-tab">
+          <!-- START GAME SECTION -->
+          <div class="card mt-5 col-lg-8 col-md-10 col-sm-12 mx-auto border-0 row">
+            <div class="row no-gutters noWrap">
+              <div class="col-md-4 col-sm-4 text-right">
+                <img src="play.png" class="card-img" id='startGame' alt="..." style="width: 50%;">
+              </div>
+              <div class="col-md-8 col-sm-8">
+                <div class="card-body text-left">
+                  <h3 class="card-title">Započni igru</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GAME SECTION -->
+          <!-- <div class="card bg-dark text-white">
+            <img src="maps.png" class="card-img" alt="...">
+            <div class="card-img-overlay">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <p class="card-text">Last updated 3 mins ago</p>
+            </div>
+          </div> -->
+
+
+          <!-- GAME SECTION -->
+          <div class="card text-center d-none" id='gameContent'>
+            <div class="card-header">
+              <div class='text-right'><span id='timer'></span><img src="timer.png" alt="" style='width:25px;'></div>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title" id = 'firstLetter'>Special title treatment</h5>
+              
+              <div class='row'>
+                <!-- PLAYER input -->
+                <div class='col-12'>
+                  <div>
+                    <div><img src="avatar.png" style='width:50px'></div>
+                    <div id='usernameContainerGame'>Aleksandra</div>
+                  </div>
+                  <form id='submitGame'>
+                    <div class="form-group row">
+                      <label for="" class='col-md-4 col-sm-12'>Država</label>
+                      <input type="text" class="form-control col-md-8 col-sm-12" id="country">
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class='col-md-4 col-sm-12'>Grad</label>
+                      <input type="text" class="form-control col-md-8 col-sm-12l" id="city">
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class='col-md-4 col-sm-12'>Reka</label>
+                      <input type="text" class="form-control col-md-8 col-sm-12" id="river">
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class='col-md-4 col-sm-12'>Planina</label>
+                      <input type="text" class="form-control col-md-8 col-sm-12" id="mountain">
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class='col-md-4 col-sm-12'>Životinja</label>
+                      <input type="text" class="form-control col-md-8 col-sm-12" id="animal">
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class='col-md-4 col-sm-12'>Biljka</label>
+                      <input type="text" class="form-control col-md-8 col-sm-12" id="plant">
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class='col-md-4 col-sm-12'>Predmet</label>
+                      <input type="text" class="form-control col-md-8 col-sm-12" id="objectInput">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+                <!-- <div class='col-6'>
+                  KOMP PLAY SECTION
+                  <div>
+                    <div><img src="avatar.png" style='width:50px'></div>
+                    <div id='usernameContainerGame'>Igrač 2</div>
+                  </div>
+                  <form>
+                    <div class="form-group">
+                      <label for="">Država</label>
+                      <input type="text" class="form-control" id="compcountry">
+                    </div>
+                    <div class="form-group">
+                      <label for="">Grad</label>
+                      <input type="text" class="form-control" id="compcity">
+                    </div>
+                    <div class="form-group">
+                      <label for="">Reka</label>
+                      <input type="text" class="form-control" id="compriver">
+                    </div>
+                    <div class="form-group">
+                      <label for="">Planina</label>
+                      <input type="text" class="form-control" id="compmountain">
+                    </div>
+                    <div class="form-group">
+                      <label for="">Životinja</label>
+                      <input type="text" class="form-control" id="companimal">
+                    </div>
+                    <div class="form-group">
+                      <label for="">Biljka</label>
+                      <input type="text" class="form-control" id="compplant">
+                    </div>
+                    <div class="form-group">
+                      <label for="">Predmet</label>
+                      <input type="text" class="form-control" id="compobject">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                </div> -->
+              </div>
+            </div>
+            <div class="card-footer text-muted">
+            </div>
+          </div>
+
+        </div>
 
         <!-- ADITIONAL OVERVIEW  -->
-        <div class="tab-pane active row" id="info" role="tabpanel" aria-labelledby="info-tab">
+        <div class="tab-pane row" id="info" role="tabpanel" aria-labelledby="info-tab">
             <!-- NAV TABS -->
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-                    aria-selected="false">Predloži pojam</a>
+                    <a class="nav-link active" id="suggest-tab" data-toggle="tab" href="#suggest" role="tab" aria-controls="suggest"
+                    aria-selected="true">Predloži pojam</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                        aria-selected="true">Rang lista</a>
+                    <a class="nav-link" id="top-tab" data-toggle="tab" href="#top" role="tab" aria-controls="top"
+                        aria-selected="false">Rang lista</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages"
+                    <a class="nav-link" id="rang-tab" data-toggle="tab" href="#rang" role="tab" aria-controls="rang"
                         aria-selected="false">Lista 2</a>
                 </li>
                 <!-- <li class="nav-item">
@@ -92,13 +210,17 @@
             
             <!-- SUGGEST CONTENT SECTION -->
             <div class="tab-content">
-                <div class="tab-pane row" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane row active" id="suggest" role="tabpanel" aria-labelledby="suggest-tab">
                     <div class="card col-lg-7 col-lg-8 col-md-10 col-sm-12 mx-auto mt-5 text-center">
                         <!-- <img src="..." class="card-img-top" alt="..."> -->
                         <div class='card-header'>
                             <h5>Predloži pojam</h5>
                         </div>
                         <div class="card-body">
+                          <!-- <div class="loader1">
+                            <div class="globus"></div>
+                            <div class="loader"></div>
+                          </div> -->
                             <p class="card-title">Izaberite kategoriju</p>
                             <form id='formSuggestTerm'>
                                 <select class="form-control" id='selectSuggestCategory'>
@@ -120,14 +242,19 @@
                 </div>
 
                 <!-- RANG LIST -->
-                <div class="tab-pane active row" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
+                <div class="tab-pane row" id="top" role="tabpanel" aria-labelledby="top-tab">
                   <!-- RANG LIST CARD -->
                   <div class="card mb-3 mt-3 col-xl-10 col-lg-10 col-md-10 col-sm-12 mx-auto">
+                    <!-- LOADER -->
+                    <div class="loader1">
+                      <div class="globus"></div>
+                      <div class="loader"></div>
+                      <button id="refreshBtn" class="btn btn-info text-white btnRefresh">Osveži listu</button>
+                    </div>
                     <div class='card-header text-center'>
                       <h3>Dvorana slavnih</h3>
                     </div>
-                    <div class="row no-gutters">
+                    <div class="row no-gutters" id="blur">
                       <div class="col-md-4 d-flex">
                         <img src="gold_cup.png" class="card-img w-75 m-auto gold-cup" alt="...">
                       </div>
@@ -145,7 +272,7 @@
                 </div>
 
                 <!-- LIST 2 -->
-                <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">RANG LISTA 2</div>
+                <div class="tab-pane" id="rang" role="tabpanel" aria-labelledby="rang-tab">RANG LISTA 2</div>
             </div>
         </div>
 
@@ -156,6 +283,7 @@
                 <div class="card col-lg-6 col-lg-6 col-md-5 col-sm-12">
                     <div class='card-header'>
                         <h5>Moj profil</h5>
+                        <p><a id="logOut" class="logOut" href="">Izloguj me</a></p>
                     </div>
                     <img src="avatar.png" class="card-img-top mt-2" alt="Avatar" style='width:150px;margin:auto'>
                     <div class="card-body">
@@ -172,10 +300,10 @@
                         <h5 class="card-title">Korisničko ime:</h5>
                         <form id="formUpdateUsername"  class='row mb-3'>
                             <div class='col-12'>
-                                <input type="text" name="inputUsername" id="inputUsername" class='form-control mt-2'>
+                                <input type="text" readonly name="inputUsername" id="inputUsername" class='form-control mt-2'>
                             </div>
                         <div class="col-12">
-                                <input type="submit" value="Izmeni" id="btnUpdateUsername" class="btn btn-info form-control mt-3">
+                                <!-- <input type="submit" value="Izmeni" id="btnUpdateUsername" class="btn btn-info form-control mt-3"> -->
                         </div>
                         </form>
                         <div id="divUpdatedUsername" class=' mt-3'></div>
@@ -210,11 +338,18 @@
   </script>
 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+    
+    <script src="/node_modules/popper.js/dist/popper.min.js"></script>
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script> 
+    
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="/node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script> -->
 
     <script src='app.js' type='module'></script>
 

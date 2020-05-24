@@ -13,6 +13,7 @@ export class QuizUI{
     get list(){
         return this._list;
     }
+    
 
     //make li rang list template
     templateRangLI(doc, usernamePosition){
@@ -46,7 +47,7 @@ export class QuizUI{
                 counter++;
             }
         });
-
+        
     }
     
 
@@ -54,6 +55,7 @@ export class QuizUI{
     //     //ul listu iz  konstruktora stavljamo na prazan sring
     //     this.list.innerHTML = '';
     // }
-
+    
+  
 }
 

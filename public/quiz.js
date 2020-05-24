@@ -48,7 +48,7 @@ export class Quiz{
     localStorage.setItem('username',newUsername);
   }
 
-  //STRING CONVERSION
+  //STRING CONVERSION to lowe case
   stringConvert(string){
     let toLowerCase = string.toLowerCase();
 
@@ -73,7 +73,7 @@ export class Quiz{
   //input validation
   inputValidation(string,div,form){
     const regexp = /^[0-9]*[A-Za-z\šđčžćŠĐŽČĆ]+$/;
-    console.log(string);
+    
     if( string.length == 0 ){
       div.innerHTML = "<span class='alert alert-warning  mt-2'>Morate uneti pojam!</span>";
       form.reset();
@@ -92,7 +92,6 @@ export class Quiz{
     let dateTmp = new Date(); 
     let term = this.capitalizeLetterTerm(termSuggested);
     let firstLetter = this.stringConvert(termSuggested);
-    console.log("TU", term);
 
     let data = {
         kategorija: category,
@@ -119,6 +118,7 @@ export class Quiz{
               .get()
               .then( snapshot => {
                 snapshot.docs.forEach( doc =>{
+                  console.log(doc.data());
                     if(doc.data()){
                       x = false;
                     }       
@@ -130,6 +130,27 @@ export class Quiz{
               });
   }
 
+  //return if term is confirmed
+  ifAnswerExist(termSuggested, category, firstLetter,callback) {
+    
+    let x = true;
+    let term = this.capitalizeLetterTerm(termSuggested);
+    this.terms.where('pojam', "==", term)
+              .where('pocetnoSlovo', '==', firstLetter)
+              .where("kategorija", "==", category)
+              .get()
+              .then( snapshot => {
+                snapshot.docs.forEach( doc =>{
+                    if(doc.data()){
+                      x = false;
+                    }       
+                });
+                callback(x);
+              })
+              .catch( error => {
+                console.log(error);
+              });
+  }
   
   //check if term is confirmed
   getAllUsers( callback ) {
@@ -159,6 +180,25 @@ export class Quiz{
     //               });
     //             }); 
 
+  
+    }
+
+    //check if term is confirmed
+  getDataTest( callback ) {
+    let letters = [];
+    this.terms.where("pocetnoSlovo", "==", "A" ).get()
+              .then( snapshot => {
+                snapshot.docs.forEach( change =>{  
+                    
+                    letters.push(change.data());
+                    
+                });
+                callback(letters);
+              })
+              .catch( error => {
+                console.log(error);
+              });
+  
     }
 
               

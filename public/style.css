@@ -37,6 +37,71 @@
   border-radius: 10px;
 }
 
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  position: absolute;
+  left: 43%;
+  top: 20%;
+ 
+  /* display: none; */
+  /* z-index: 101; */
+}
+.globus {
+  background: url('loader.gif') no-repeat center center;
+  position: absolute;
+  left: 43%;
+  top: 20%;
+  width: 120px;
+  height: 120px;
+}
+
+.blur {
+  filter: blur(3px);
+}
+
+.timer{
+  color: white;
+  background-color: rgb(24, 177, 24);
+  padding: 9px;
+  font-weight: bold;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+.loader1 {
+  background: transparent;
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* visibility: hidden; */
+    display:none;
+    z-index: 100;
+}
+.btnRefresh {
+  position: absolute;
+  top: 49%;
+  left: 44%;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 
 @media (max-width: 992px) {
     .mobileMenu {
@@ -75,7 +140,13 @@
       z-index: 1029;
     }
     .navSmallScreen {
-      width: 43%;
+      width: 50%;
+      top: 23px;
+    }
+    #profiles-tab {
+      display: flex;
+      flex-direction: column;
+      word-break: break-all;
     }
     .navSmallScreenDir {
       flex-direction: column;
@@ -83,5 +154,11 @@
     .gold-cup{
       width:50% !important;
       margin-top: 2em  !important;
+    }
+    .noWrap{
+      flex-wrap: nowrap !important;
+      text-align: center;
+      justify-self: center;
+      align-items: center;
     }
   }
