@@ -5,8 +5,6 @@ export class Quiz{
       this.username = u;
       this.terms = db.collection('pojmovi');
       this.users = [];
-      this.valResult;
-      this.firstLetter;
   }
 
   set username(u){
@@ -15,14 +13,6 @@ export class Quiz{
 
   set users(ua){
     this._users = ua;
-  }
-
-  set validResult(vr){
-    this._valResult = vr;
-  }
-
-  set putFirstLetter(vr){
-    this._firstLetter = vr;
   }
 
   //geteri
@@ -34,21 +24,13 @@ export class Quiz{
     return this._users;
   }
 
-  get validResult(){
-    return this._valResult;
-  }
-
-  get retFirstLetter(){
-    return this._firstLetter;
-  }
-
   //promena korisnickog imena
   updateUsername(newUsername){
     this.username = newUsername;
     localStorage.setItem('username',newUsername);
   }
 
-  //STRING CONVERSION to lowe case
+  //STRING CONVERSION to lower case - returns sanitized first letter
   stringConvert(string){
     let toLowerCase = string.toLowerCase();
 
@@ -62,7 +44,7 @@ export class Quiz{
     }
   }
 
-   //capitalizeFirstLetter
+   //capitalizeFirstLetter return full final word with first capital
    capitalizeLetterTerm(string){
     let firstLetter = string.slice(0,1).toUpperCase();
     let restWord = string.slice(1).toLowerCase();
@@ -130,28 +112,6 @@ export class Quiz{
               });
   }
 
-  //return if term is confirmed
-  ifAnswerExist(termSuggested, category, firstLetter,callback) {
-    
-    let x = true;
-    let term = this.capitalizeLetterTerm(termSuggested);
-    this.terms.where('pojam', "==", term)
-              .where('pocetnoSlovo', '==', firstLetter)
-              .where("kategorija", "==", category)
-              .get()
-              .then( snapshot => {
-                snapshot.docs.forEach( doc =>{
-                    if(doc.data()){
-                      x = false;
-                    }       
-                });
-                callback(x);
-              })
-              .catch( error => {
-                console.log(error);
-              });
-  }
-  
   //check if term is confirmed
   getAllUsers( callback ) {
     
@@ -169,7 +129,6 @@ export class Quiz{
                 console.log(error);
               });
 
-    
     // this.terms.orderBy('korisnik').onSnapshot
     //           (querySnapshot => {
     //             querySnapshot.docChanges().forEach(change => {
@@ -179,32 +138,36 @@ export class Quiz{
     //                 callback(this.users);
     //               });
     //             }); 
-
-  
     }
 
-    //check if term is confirmed
-  getDataTest( callback ) {
-    let letters = [];
-    this.terms.where("pocetnoSlovo", "==", "A" ).get()
+
+  //return if term is confirmed
+  async ifAnswerExist(termSuggested, category, callback) {
+    
+    var y = true;
+    let term = this.capitalizeLetterTerm(termSuggested);
+    let firstLetter = this.stringConvert(termSuggested);
+
+    //console.log(term);
+    //console.log(firstLetter);
+    this.terms.where('pojam', "==", term)
+              .where('pocetnoSlovo', '==', firstLetter)
+              .where("kategorija", "==", category)
+              .get()
               .then( snapshot => {
-                snapshot.docs.forEach( change =>{  
-                    
-                    letters.push(change.data());
-                    
+                snapshot.docs.forEach( doc =>{
+                    if(doc.data()){
+                      y = false;
+                      // return y;
+                    }
+                    console.log(doc.data()); 
                 });
-                callback(letters);
+                callback(y);
               })
               .catch( error => {
                 console.log(error);
               });
-  
-    }
-
-              
-             
-                
-                
+  }
   
 }
 

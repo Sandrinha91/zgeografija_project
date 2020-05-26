@@ -1,3 +1,5 @@
+// const Swal = require('sweetalert2')
+
 $(document).ready(function() {
   if (location.hash) {
       $("a[href='" + location.hash + "']").tab("show");
@@ -31,11 +33,8 @@ let profilesTab = document.querySelector('#navContentUser');
 let loader = document.querySelector('.loader1');
 let logOut = document.querySelector('#logOut');
 let blurTable = document.querySelector('#blur');
-// let globus = document.getElementsByClassName('globus');
 let refreshListBtn = document.querySelector('#refreshBtn');
-// let profilesTab1 = document.querySelector('#profile-tab');
 let rangListTemplate = new QuizUI(rangList);
-
 
 let username = () => {
     if( localStorage.username ){
@@ -85,7 +84,6 @@ let makeRangList = (qi) => {
   
     // make html list template
     rangListTemplate.templateRangLI(finalSort, usernamePosition);
-  
   });
 }
 
@@ -198,8 +196,7 @@ formSuggestTerm.addEventListener( 'submit', e =>{
                   divTermError.innerHTML = `<span class='alert alert-success mt-2'>Samo ulogovani korisnici mogu predložiti pojam!</span>`;
                 }
                 disapearAfter(divTermError);
-                //formSuggestTerm.reset();
-                
+                formSuggestTerm.reset();
             } else {
                 divTermError.innerHTML = `<span class='alert alert-warning mt-2'>Pojam: ${sugestedTrim} je već unet!</span>`;
                 disapearAfter(divTermError);
@@ -262,22 +259,21 @@ let animal = document.querySelector("#animal");
 let plant = document.querySelector("#plant");
 let objectInput = document.querySelector("#objectInput");
 let firstLetter = document.querySelector("#firstLetter");
-let counter = 10;
+let counter = 30;
 let clock;
+let testKvizaLista = document.querySelector('#testKviza');
 let clockIsSet = false;
 let alpha = "ABCČĆDDžĐEFGHIJKLLjMNNjOPRSŠTUVZŽ".split('');
-let arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
+// let arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
+let arrayLetters = ["A"];
 
 //console.log(alpha);
-
-function checkData(givenLetter){
-  //console.log(river.value);
-  //console.log(river.value);
-  //console.log('bbbbbbbbbbbbbbbbbb');
+//check data after submit
+function checkData(){
 
   let countryFinal = country.value.replace(/ /g,'');
   let cityFinal = city.value.replace(/ /g,'');
-  let riverFinal = city.value.replace(/ /g,'');
+  let riverFinal = river.value.replace(/ /g,'');
   let mountainFinal = mountain.value.replace(/ /g,'');
   let animalFinal = animal.value.replace(/ /g,'');
   let plantFinal = plant.value.replace(/ /g,'');
@@ -285,26 +281,91 @@ function checkData(givenLetter){
 
   //console.log(givenLetter);
   //, [cityFinal, 'grad']
-  let arrayAnswers = [ [countryFinal, 'drzava'] ];
+  let arrayAnswers = [ [countryFinal, 'Država'], [cityFinal, 'Grad'], [riverFinal, 'Reka'], [mountainFinal, 'Planina'], [animalFinal, 'Životinja'], [plantFinal, 'Biljka'], [objectInputFinal, 'Predmet'] ];
+  console.log(typeof(arrayAnswers));
+  let arraySanitizedAnswers = [];
+  let niz2 = [];
+  //console.log(typeof(arraySanitizedAnswers));
+  
   arrayAnswers.forEach( e => {
-    console.log(e[0].charAt(0).toUpperCase(), e[1]);
+    if ( e[0].charAt(0).toUpperCase() !==  localStorage.givenLetter || e[0] == '' || e[0] == undefined){
+      arraySanitizedAnswers.push('Netacno1');
+      // console.log(typeof(arraySanitizedAnswers));
+      // console.log('netacna drzava',arraySanitizedAnswers[0]);
+    } else {
+      //console.log(e[0]);
+        
+        qi.ifAnswerExist( e[0], e[1] , data => { 
+              if(data){
+                //let value = 'Netacno';
+                //return this.value;
+                
+                niz2.push('Netacno');
+                //console.log(data);
+                // console.log(typeof(arraySanitizedAnswers));
+                //console.log('netacno',arraySanitizedAnswers[0]); 
+              } else {
+                let value = e[0];
+                //return this.value;
+                
+                niz2.push( `${value}` );
+                
+                //console.log(data);
+                // console.log(e[0]);
+                //console.log(arraySanitizedAnswers[0]);
+                // console.log(typeof(arraySanitizedAnswers));
+              }
+              // return niz2;
+            });
+        //arraySanitizedAnswers.push(value);
+       //arraySanitizedAnswers[0];
+       //arraySanitizedAnswers[1];
+    }
+    //console.log(arraySanitizedAnswers.slice());
+  });
+  var children = arraySanitizedAnswers.concat(niz2);
+
+  console.log(Array.isArray(arraySanitizedAnswers));
+  //console.log(arraySanitizedAnswers.slice());
+  console.log(children.length);
+  console.log('NIZZZZZZZ', children);
+  //console.log(typeof(arraySanitizedAnswers));
+
+  children.forEach( e => {
+    console.log(e, 'PRRRRRRR');
+    let liNew = document.createElement('LI');
+    testKvizaLista.appendChild(liNew);
+    liNew.innerHTML = `${e}`;
   });
 
-  arrayAnswers.forEach( e => {
-    console.log(givenLetter);
-      qi1.ifAnswerExist( e[0], e[1] , givenLetter , data => { 
-        if(data){
-          console.log(data);
-        }
-       });
+  
+  
+  let arrayCompANswers = [];
+  //generateAnswers();
+
+  // arrayAnswers.forEach( e => {
+  //   //console.log(localStorage.givenLetter);
+  //     qi.ifAnswerExist( e[0], e[1] , data => { 
+  //       if(data){
+  //         console.log(data);
+  //       }
+  //      });
     
-  });
+  //  });
 
   // input check if empty
-  //qi1.ifExist
-
+  //qi1.ifExi
 }
 
+//generate random number
+
+
+//
+// generateAnswers(){
+   
+// }
+
+//submit game / clear interval
 submitGame.addEventListener('submit' , e => {
   e.preventDefault();
   clearInterval(clock);
@@ -314,11 +375,12 @@ submitGame.addEventListener('submit' , e => {
   checkData();
 });
   
+//start game / set timer / define first letter
 startGame.addEventListener('click', () => {
   gameContent.classList.remove('d-none');
   const randomElement = arrayLetters[Math.floor(Math.random() * arrayLetters.length)];
+  localStorage.setItem('givenLetter',randomElement);
   firstLetter.innerHTML = `${randomElement}`;
-  console.log(randomElement);
   //let givenLetter = randomElement;
 
   if(!clockIsSet) {
@@ -326,24 +388,18 @@ startGame.addEventListener('click', () => {
       timer.classList.add('timer');
       timer.innerHTML = counter;
       clock = setInterval(() => {
-          console.log(randomElement);
-          let givenLetter = randomElement;
           counter--;
           
           if( counter == 0 ){
+            timer.innerHTML = counter;
             clearInterval(clock);
             clockIsSet = false;
-            checkData(givenLetter);
+            checkData();
             //ovde da se pozove naredna funkcija koja ce da ispituje polja i odradi validaciju
           }
-          
           timer.innerHTML = counter;
       }, 1000);
   }
-
-  
-
-
 });
 
 
