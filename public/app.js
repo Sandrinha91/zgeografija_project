@@ -17,6 +17,7 @@ $(window).on("popstate", function() {
 
 import {Quiz} from "./quiz.js";
 import {QuizUI} from "./ui.js";
+import {Game} from "./game.js";
 
 // DOM
 let formSuggestTerm = document.querySelector('#formSuggestTerm');
@@ -248,122 +249,132 @@ logOut.addEventListener("click", () => {
 // QUIZ TIME
 
 let startGame = document.querySelector("#startGame");
+let startGameDiv = document.querySelector("#startGameDiv");
 let timer = document.querySelector("#timer");
-let gameContent = document.querySelector("#gameContent");
 let submitGame = document.querySelector("#submitGame");
-let country = document.querySelector("#country");
-let city = document.querySelector("#city");
-let river = document.querySelector("#river");
-let mountain = document.querySelector("#mountain");
-let animal = document.querySelector("#animal");
-let plant = document.querySelector("#plant");
-let objectInput = document.querySelector("#objectInput");
 let firstLetter = document.querySelector("#firstLetter");
+let tableResultDiv = document.querySelector("#tableResultDiv");
+let gameInputsDiv = document.querySelector('#gameInputsDiv');
+let gameContent = document.querySelector('#gameContent');
+let tableResetButton = document.querySelector('#tableResetButton');
 let counter = 30;
 let clock;
 let testKvizaLista = document.querySelector('#testKviza');
 let clockIsSet = false;
-let alpha = "ABCČĆDDžĐEFGHIJKLLjMNNjOPRSŠTUVZŽ".split('');
 // let arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
 let arrayLetters = ["A"];
 
-//console.log(alpha);
+// New game button
+
+tableResetButton.addEventListener('click', e => {
+  location.reload();
+});
+
 //check data after submit
 function checkData(){
 
-  let countryFinal = country.value.replace(/ /g,'');
-  let cityFinal = city.value.replace(/ /g,'');
-  let riverFinal = river.value.replace(/ /g,'');
-  let mountainFinal = mountain.value.replace(/ /g,'');
-  let animalFinal = animal.value.replace(/ /g,'');
-  let plantFinal = plant.value.replace(/ /g,'');
-  let objectInputFinal = objectInput.value.replace(/ /g,'');
+  // get answers from dom input
+  let country = document.querySelector("#country").value.replace(/ /g,'');
+  let city = document.querySelector("#city").value.replace(/ /g,'');
+  let river = document.querySelector("#river").value.replace(/ /g,'');
+  let mountain = document.querySelector("#mountain").value.replace(/ /g,'');
+  let animal = document.querySelector("#animal").value.replace(/ /g,'');
+  let plant = document.querySelector("#plant").value.replace(/ /g,'');
+  let objectInput = document.querySelector("#objectInput").value.replace(/ /g,'');
 
-  //console.log(givenLetter);
-  //, [cityFinal, 'grad']
-  let arrayAnswers = [ [countryFinal, 'Država'], [cityFinal, 'Grad'], [riverFinal, 'Reka'], [mountainFinal, 'Planina'], [animalFinal, 'Životinja'], [plantFinal, 'Biljka'], [objectInputFinal, 'Predmet'] ];
-  console.log(typeof(arrayAnswers));
-  let arraySanitizedAnswers = [];
-  let niz2 = [];
-  //console.log(typeof(arraySanitizedAnswers));
+  //put answers in array
+  let arrayAnswers = [ country, city, river, mountain, animal, plant, objectInput];
+  let game = new Game(arrayAnswers);
+  game.getCompAnswers();
+  game.filterAnswers(arrayAnswers);
+  //console.log('korisnik kucao',arrayAnswers);
+
+  let makeTableData = ( row, category, usersTerm, usersPoints, compPoints, compAnswer ) => {
+    let cell0 = row.insertCell(0);
+    let cell1 = row.insertCell(1);
+    let cell2 = row.insertCell(2);
+    let cell3 = row.insertCell(3);
+    let cell4 = row.insertCell(4);
+    cell0.innerHTML = `${category}`;
+    cell1.innerHTML = `${usersTerm}`;
+    cell2.innerHTML = `${usersPoints}`;
+    cell3.innerHTML = `${compPoints}`;
+    cell4.innerHTML = `${compAnswer}`;
+  }
   
-  arrayAnswers.forEach( e => {
-    if ( e[0].charAt(0).toUpperCase() !==  localStorage.givenLetter || e[0] == '' || e[0] == undefined){
-      arraySanitizedAnswers.push('Netacno1');
-      // console.log(typeof(arraySanitizedAnswers));
-      // console.log('netacna drzava',arraySanitizedAnswers[0]);
-    } else {
-      //console.log(e[0]);
-        
-        qi.ifAnswerExist( e[0], e[1] , data => { 
-              if(data){
-                //let value = 'Netacno';
-                //return this.value;
-                
-                niz2.push('Netacno');
-                //console.log(data);
-                // console.log(typeof(arraySanitizedAnswers));
-                //console.log('netacno',arraySanitizedAnswers[0]); 
-              } else {
-                let value = e[0];
-                //return this.value;
-                
-                niz2.push( `${value}` );
-                
-                //console.log(data);
-                // console.log(e[0]);
-                //console.log(arraySanitizedAnswers[0]);
-                // console.log(typeof(arraySanitizedAnswers));
-              }
-              // return niz2;
-            });
-        //arraySanitizedAnswers.push(value);
-       //arraySanitizedAnswers[0];
-       //arraySanitizedAnswers[1];
+  setTimeout(() => {
+    startGameDiv.classList.add('d-none');
+    tableResultDiv.classList.remove('d-none');
+    gameInputsDiv.classList.add('d-none');
+    let usersFinal = [localStorage.userAnswer0, localStorage.userAnswer1, localStorage.userAnswer2, localStorage.userAnswer3, localStorage.userAnswer4, localStorage.userAnswer5, localStorage.userAnswer6];
+    let compAnswers = [localStorage.compAnswer0, localStorage.compAnswer1, localStorage.compAnswer2, localStorage.compAnswer3, localStorage.compAnswer4, localStorage.compAnswer5, localStorage.compAnswer6];
+    let categories = game.categories;
+    let userPoints = 0;
+    let compPoints = 0;
+    let usernameResultTable = document.querySelector('#usernameResultTable');
+    let tableResult = document.querySelector('#tableResult');
+    usernameResultTable.innerHTML = `${localStorage.username}`;
+    // compare values
+    usersFinal.forEach( (elem, index) => {
+      let row = tableResult.insertRow(index);
+      if ( elem != 'Empty' && compAnswers[index] != 'Empty' ){
+        if( elem !=  compAnswers[index]){
+          userPoints += 10;
+          compPoints += 10;
+
+          makeTableData(row, categories[index], usersFinal[index], 10, 10, compAnswers[index]);
+          
+        }else{
+          userPoints += 5;
+          compPoints += 5;
+
+          makeTableData(row, categories[index], usersFinal[index], 5, 5, compAnswers[index]);
+          
+        }
+      } else if( elem == 'Empty' && compAnswers[index] == 'Empty' ){
+          userPoints += 0;
+          compPoints += 0;
+
+          makeTableData(row, categories[index], usersFinal[index], 0, 0, compAnswers[index]);
+          
+      } else {
+        if( elem == 'Empty' &&  compAnswers[index] != 'Empty' ){
+          compPoints += 15;
+
+          makeTableData(row, categories[index], usersFinal[index], 0, 15, compAnswers[index]);
+         
+        } else {
+          userPoints += 15;
+
+          makeTableData(row, categories[index], usersFinal[index], 15, 0, compAnswers[index]);
+          
+        }
+      }
+    });
+
+    let row = tableResult.insertRow(7);
+    makeTableData(row, 'Ukupno:', '', userPoints, compPoints, '');
+
+    if( userPoints < compPoints ){
+      let row = tableResult.insertRow(8);
+      let cell0 = row.insertCell(0);
+      cell0.innerHTML = 'Izgubili ste!!!';
+    } else if( userPoints > compPoints ){
+      let row = tableResult.insertRow(8);
+      let cell0 = row.insertCell(0);
+      cell0.innerHTML = `Cestitamo ${localStorage.username}!!! Pobedili ste!!`;
+    } else{
+      let row = tableResult.insertRow(8);
+      let cell0 = row.insertCell(0);
+      cell0.innerHTML = `Nereseno!!!`;
     }
-    //console.log(arraySanitizedAnswers.slice());
-  });
-  var children = arraySanitizedAnswers.concat(niz2);
 
-  console.log(Array.isArray(arraySanitizedAnswers));
-  //console.log(arraySanitizedAnswers.slice());
-  console.log(children.length);
-  console.log('NIZZZZZZZ', children);
-  //console.log(typeof(arraySanitizedAnswers));
+    console.log('korisnik FILTRIRANI1',usersFinal);
+    console.log('komp FILTRIRANI1',compAnswers);
+  }, 3000);  
 
-  children.forEach( e => {
-    console.log(e, 'PRRRRRRR');
-    let liNew = document.createElement('LI');
-    testKvizaLista.appendChild(liNew);
-    liNew.innerHTML = `${e}`;
-  });
-
-  
-  
-  let arrayCompANswers = [];
-  //generateAnswers();
-
-  // arrayAnswers.forEach( e => {
-  //   //console.log(localStorage.givenLetter);
-  //     qi.ifAnswerExist( e[0], e[1] , data => { 
-  //       if(data){
-  //         console.log(data);
-  //       }
-  //      });
-    
-  //  });
-
-  // input check if empty
-  //qi1.ifExi
 }
 
-//generate random number
-
-
-//
-// generateAnswers(){
-   
-// }
 
 //submit game / clear interval
 submitGame.addEventListener('submit' , e => {
@@ -377,14 +388,17 @@ submitGame.addEventListener('submit' , e => {
   
 //start game / set timer / define first letter
 startGame.addEventListener('click', () => {
+  startGameDiv.classList.add('d-none');
+  tableResultDiv.classList.add('d-none');
+  gameInputsDiv.classList.remove('d-none');
   gameContent.classList.remove('d-none');
   const randomElement = arrayLetters[Math.floor(Math.random() * arrayLetters.length)];
   localStorage.setItem('givenLetter',randomElement);
   firstLetter.innerHTML = `${randomElement}`;
-  //let givenLetter = randomElement;
+
 
   if(!clockIsSet) {
-      clockIsSet = true;
+    clockIsSet = true;
       timer.classList.add('timer');
       timer.innerHTML = counter;
       clock = setInterval(() => {
@@ -395,22 +409,10 @@ startGame.addEventListener('click', () => {
             clearInterval(clock);
             clockIsSet = false;
             checkData();
-            //ovde da se pozove naredna funkcija koja ce da ispituje polja i odradi validaciju
           }
           timer.innerHTML = counter;
       }, 1000);
   }
 });
 
-
-// qi.getDataTest( e => {
-//   letters.forEach( e => {
-//       qi1.ifAnswerExist( e[0], e[1] , givenLetter , data => { 
-//         if(data){
-//           console.log(data);
-//         }
-//        });
-    
-//   });
-// });
 
