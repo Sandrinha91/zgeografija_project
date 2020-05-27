@@ -32,7 +32,7 @@ export class QuizUI{
                 rangLI.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
     
                 if( counter <= 3 ){
-                    rangLI.innerHTML = `<span><img src='${counter}.png' style="width:40px;height:40px;"></span><b> ${e[0]} </b> <span class="badge badge-info badge-pill">${e[1]}</span>`;
+                    rangLI.innerHTML = `<span><img src='img/${counter}.png' style="width:40px;height:40px;"></span><b> ${e[0]} </b> <span class="badge badge-info badge-pill">${e[1]}</span>`;
                 }else if (counter <=5){
                     rangLI.innerHTML = `<span class='fame-icon'>${counter}</span><b> ${e[0]} </b> <span class="badge badge-info badge-pill">${e[1]}</span>`;
                 }

@@ -87,18 +87,19 @@ export class Game{
     }
 
     //GET COMPUTER ANSWERS
-    async getCompAnswers(){
+    getCompAnswers(){
 
       this.categories.forEach( (category, index) => {
-
         let rand = this.generateRandomNumber();
         if ( this.checkRandomNumb(rand) ){
           this.terms.where('pocetnoSlovo', '==', localStorage.givenLetter)
                 .where("kategorija", "==", category)
+                .limit(1)
                 .get()
                 .then( snaphot => {
                    snaphot.forEach( doc => {
                     //this.compAnswers.push(doc.data().pojam);
+                    console.log(doc.data());
                         localStorage.setItem(`compAnswer${index}`,`${doc.data().pojam}`);
                         // localStorage.setItem(`compAnswer${index}`,`Ne postoji pojam u bazi`);
                   });

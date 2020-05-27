@@ -321,33 +321,23 @@ function checkData(){
         if( elem !=  compAnswers[index]){
           userPoints += 10;
           compPoints += 10;
-
           makeTableData(row, categories[index], usersFinal[index], 10, 10, compAnswers[index]);
-          
         }else{
           userPoints += 5;
           compPoints += 5;
-
           makeTableData(row, categories[index], usersFinal[index], 5, 5, compAnswers[index]);
-          
         }
       } else if( elem == 'Empty' && compAnswers[index] == 'Empty' ){
           userPoints += 0;
           compPoints += 0;
-
           makeTableData(row, categories[index], usersFinal[index], 0, 0, compAnswers[index]);
-          
       } else {
         if( elem == 'Empty' &&  compAnswers[index] != 'Empty' ){
           compPoints += 15;
-
           makeTableData(row, categories[index], usersFinal[index], 0, 15, compAnswers[index]);
-         
         } else {
           userPoints += 15;
-
           makeTableData(row, categories[index], usersFinal[index], 15, 0, compAnswers[index]);
-          
         }
       }
     });

@@ -1,5 +1,5 @@
 .bg-image {
-    background: url('bg_img.jpg') no-repeat center center;
+    background: url('img/bg_img.jpg') no-repeat center center;
     object-fit: cover;
     margin-top: 57px;
     height: 36vh;
