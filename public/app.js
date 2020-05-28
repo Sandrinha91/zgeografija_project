@@ -285,83 +285,86 @@ function checkData(){
   //put answers in array
   let arrayAnswers = [ country, city, river, mountain, animal, plant, objectInput];
   let game = new Game(arrayAnswers);
-  game.getCompAnswers();
+  //let arr = game.getCompAnswers('Država', 0);
+  //console.log(arr[0]);
   game.filterAnswers(arrayAnswers);
-  //console.log('korisnik kucao',arrayAnswers);
-
-  let makeTableData = ( row, category, usersTerm, usersPoints, compPoints, compAnswer ) => {
-    let cell0 = row.insertCell(0);
-    let cell1 = row.insertCell(1);
-    let cell2 = row.insertCell(2);
-    let cell3 = row.insertCell(3);
-    let cell4 = row.insertCell(4);
-    cell0.innerHTML = `${category}`;
-    cell1.innerHTML = `${usersTerm}`;
-    cell2.innerHTML = `${usersPoints}`;
-    cell3.innerHTML = `${compPoints}`;
-    cell4.innerHTML = `${compAnswer}`;
-  }
   
-  setTimeout(() => {
-    startGameDiv.classList.add('d-none');
-    tableResultDiv.classList.remove('d-none');
-    gameInputsDiv.classList.add('d-none');
-    let usersFinal = [localStorage.userAnswer0, localStorage.userAnswer1, localStorage.userAnswer2, localStorage.userAnswer3, localStorage.userAnswer4, localStorage.userAnswer5, localStorage.userAnswer6];
-    let compAnswers = [localStorage.compAnswer0, localStorage.compAnswer1, localStorage.compAnswer2, localStorage.compAnswer3, localStorage.compAnswer4, localStorage.compAnswer5, localStorage.compAnswer6];
-    let categories = game.categories;
-    let userPoints = 0;
-    let compPoints = 0;
-    let usernameResultTable = document.querySelector('#usernameResultTable');
-    let tableResult = document.querySelector('#tableResult');
-    usernameResultTable.innerHTML = `${localStorage.username}`;
-    // compare values
-    usersFinal.forEach( (elem, index) => {
-      let row = tableResult.insertRow(index);
-      if ( elem != 'Empty' && compAnswers[index] != 'Empty' ){
-        if( elem !=  compAnswers[index]){
-          userPoints += 10;
-          compPoints += 10;
-          makeTableData(row, categories[index], usersFinal[index], 10, 10, compAnswers[index]);
-        }else{
-          userPoints += 5;
-          compPoints += 5;
-          makeTableData(row, categories[index], usersFinal[index], 5, 5, compAnswers[index]);
-        }
-      } else if( elem == 'Empty' && compAnswers[index] == 'Empty' ){
-          userPoints += 0;
-          compPoints += 0;
-          makeTableData(row, categories[index], usersFinal[index], 0, 0, compAnswers[index]);
-      } else {
-        if( elem == 'Empty' &&  compAnswers[index] != 'Empty' ){
-          compPoints += 15;
-          makeTableData(row, categories[index], usersFinal[index], 0, 15, compAnswers[index]);
-        } else {
-          userPoints += 15;
-          makeTableData(row, categories[index], usersFinal[index], 15, 0, compAnswers[index]);
-        }
-      }
-    });
+  console.log('Posle pozivaaaaaaaaaaaaaa');
+  //console.log(game.compAnswers);
 
-    let row = tableResult.insertRow(7);
-    makeTableData(row, 'Ukupno:', '', userPoints, compPoints, '');
+  // let makeTableData = ( row, category, usersTerm, usersPoints, compPoints, compAnswer ) => {
+  //   let cell0 = row.insertCell(0);
+  //   let cell1 = row.insertCell(1);
+  //   let cell2 = row.insertCell(2);
+  //   let cell3 = row.insertCell(3);
+  //   let cell4 = row.insertCell(4);
+  //   cell0.innerHTML = `${category}`;
+  //   cell1.innerHTML = `${usersTerm}`;
+  //   cell2.innerHTML = `${usersPoints}`;
+  //   cell3.innerHTML = `${compPoints}`;
+  //   cell4.innerHTML = `${compAnswer}`;
+  // }
+  
+  // setTimeout(() => {
+  //   startGameDiv.classList.add('d-none');
+  //   tableResultDiv.classList.remove('d-none');
+  //   gameInputsDiv.classList.add('d-none');
+  //   let usersFinal = [localStorage.userAnswer0, localStorage.userAnswer1, localStorage.userAnswer2, localStorage.userAnswer3, localStorage.userAnswer4, localStorage.userAnswer5, localStorage.userAnswer6];
+  //   let compAnswers = [localStorage.compAnswer0, localStorage.compAnswer1, localStorage.compAnswer2, localStorage.compAnswer3, localStorage.compAnswer4, localStorage.compAnswer5, localStorage.compAnswer6];
+  //   let categories = game.categories;
+  //   let userPoints = 0;
+  //   let compPoints = 0;
+  //   let usernameResultTable = document.querySelector('#usernameResultTable');
+  //   let tableResult = document.querySelector('#tableResult');
+  //   usernameResultTable.innerHTML = `${localStorage.username}`;
+  //   // compare values
+  //   usersFinal.forEach( (elem, index) => {
+  //     let row = tableResult.insertRow(index);
+  //     if ( elem != 'Empty' && compAnswers[index] != 'Empty' ){
+  //       if( elem !=  compAnswers[index]){
+  //         userPoints += 10;
+  //         compPoints += 10;
+  //         makeTableData(row, categories[index], usersFinal[index], 10, 10, compAnswers[index]);
+  //       }else{
+  //         userPoints += 5;
+  //         compPoints += 5;
+  //         makeTableData(row, categories[index], usersFinal[index], 5, 5, compAnswers[index]);
+  //       }
+  //     } else if( elem == 'Empty' && compAnswers[index] == 'Empty' ){
+  //         userPoints += 0;
+  //         compPoints += 0;
+  //         makeTableData(row, categories[index], usersFinal[index], 0, 0, compAnswers[index]);
+  //     } else {
+  //       if( elem == 'Empty' &&  compAnswers[index] != 'Empty' ){
+  //         compPoints += 15;
+  //         makeTableData(row, categories[index], usersFinal[index], 0, 15, compAnswers[index]);
+  //       } else {
+  //         userPoints += 15;
+  //         makeTableData(row, categories[index], usersFinal[index], 15, 0, compAnswers[index]);
+  //       }
+  //     }
+  //   });
 
-    if( userPoints < compPoints ){
-      let row = tableResult.insertRow(8);
-      let cell0 = row.insertCell(0);
-      cell0.innerHTML = 'Izgubili ste!!!';
-    } else if( userPoints > compPoints ){
-      let row = tableResult.insertRow(8);
-      let cell0 = row.insertCell(0);
-      cell0.innerHTML = `Cestitamo ${localStorage.username}!!! Pobedili ste!!`;
-    } else{
-      let row = tableResult.insertRow(8);
-      let cell0 = row.insertCell(0);
-      cell0.innerHTML = `Nereseno!!!`;
-    }
+  //   let row = tableResult.insertRow(7);
+  //   makeTableData(row, 'Ukupno:', '', userPoints, compPoints, '');
 
-    console.log('korisnik FILTRIRANI1',usersFinal);
-    console.log('komp FILTRIRANI1',compAnswers);
-  }, 3000);  
+  //   if( userPoints < compPoints ){
+  //     let row = tableResult.insertRow(8);
+  //     let cell0 = row.insertCell(0);
+  //     cell0.innerHTML = 'Izgubili ste!!!';
+  //   } else if( userPoints > compPoints ){
+  //     let row = tableResult.insertRow(8);
+  //     let cell0 = row.insertCell(0);
+  //     cell0.innerHTML = `Cestitamo ${localStorage.username}!!! Pobedili ste!!`;
+  //   } else{
+  //     let row = tableResult.insertRow(8);
+  //     let cell0 = row.insertCell(0);
+  //     cell0.innerHTML = `Nereseno!!!`;
+  //   }
+
+  //   console.log('korisnik FILTRIRANI1',usersFinal);
+  //   console.log('komp FILTRIRANI1',compAnswers);
+  // }, 3000);  
 
 }
 
@@ -405,4 +408,35 @@ startGame.addEventListener('click', () => {
   }
 });
 
+// let quizTest = new Quiz(`${localStorage.username}`);
 
+// async function getData(){
+//   let proba = quizTest.terms.get()
+//               .then( snapshot => {
+//                 snapshot.docs.forEach( doc =>{
+//                   console.log(doc.data());
+//                 });
+//               })
+//               .catch( error => {
+//                 console.log(error);
+//               });
+  
+//   let result = 
+// }
+//firstFunction(10);
+
+async function firstFunction(a){
+  console.log('prvi cvor',a);
+  let b = await doSomethingElse(a);
+  console.log(b);
+  return;
+} 
+
+async function doSomethingElse(a){
+  console.log('Poslednji cvor',a);
+  let b = a*2;
+  console.log(b);
+  return b;
+}
+
+firstFunction(5);
