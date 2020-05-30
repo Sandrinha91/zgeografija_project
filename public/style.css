@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Ribeye&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aclonica&display=swap');
 .bg-image {
     background: url('img/bg_img.jpg') no-repeat center center;
     object-fit: cover;
@@ -7,6 +9,11 @@
 .logo-pic{
   width: 45px;
 }
+
+.logoFont{
+  font-family: 'Aclonica', sans-serif;
+}
+
 .fame-icon {
   border: 1px solid black;
   border-radius: 50%;
@@ -72,6 +79,13 @@
   font-weight: bold;
   border-radius: 50%;
   font-size: 18px;
+  animation: timer 90s infinite;
+}
+@keyframes timer {
+  0% {background-color: rgb(24, 177, 24);}
+  60% {background-color: rgb(255, 128, 0);}
+  95% {background-color: rgb(255, 0, 0);}
+
 }
 
 .loader1 {
@@ -89,6 +103,21 @@
   position: absolute;
   top: 49%;
   left: 44%;
+}
+
+.cell-width-term {
+  width: 20%;
+}
+.cell-width-points {
+  width: 10%;
+}
+.cell-width-answer {
+  width: 30%;
+}
+
+.letsPlay{
+  font-family: 'Ribeye', cursive !important;
+  font-size: 28px;
 }
 
 /* Safari */

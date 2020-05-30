@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css"> 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <link rel="stylesheet" href="style.css">
+    <link rel='icon' href='img/favicon.png' type='image/x-icon'>
     <title>Zanimljiva Geografija | Quiz</title>
 </head>
 <body>
@@ -13,7 +14,7 @@
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-sm-start fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 mr-auto" href="#"><img src="logo.gif" alt="" class='logo-pic'> Zanimljiva Geografija</a>
+        <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 mr-auto logoFont" href="#"><img src="logo.gif" alt="" class='logo-pic'> Zanimljiva Geografija</a>
         <button class="navbar-toggler align-self-start" type="button">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -76,8 +77,19 @@
               </div>
               <div class="col-md-8 col-sm-8">
                 <div class="card-body text-left">
-                  <h3 class="card-title">Započni igru</h3>
+                  <h3 class="card-title letsPlay">Play a game?</h3>
                 </div>
+              </div>
+            </div>
+            <div class="row no-gutters noWrap mt-2 d-none" id = 'vsWho'>
+              <div class='col-12 bg-info text-white text-center p-1 rounded'> Izaberi protivnika </div>
+              <div class="row align-items-center">
+                <div class="col-md-6 border border-top-0 border-bottom-0 border-left-0 border-info d-flex justify-content-center" id='startGameVsBot'>
+                  <img src="img/bot.png" class="card-img" alt="..." style='width:80%'>
+              </div>
+              <div class="col-md-6 d-flex justify-content-center" id='startGameVsPlayer'>
+                <img src="img/user.png" class="card-img" alt=".." style='width:60%'>
+              </div>
               </div>
             </div>
           </div>
@@ -94,9 +106,9 @@
 
 
           <!-- GAME SECTION -->
-          <div class="card text-center d-none" id='gameContent'>
+          <div class="card text-center d-none mx-auto col-lg-10 text-center" id='gameContent'>
             <div id = 'tableResultDiv'>
-              <table class="table">
+              <table class="table text-center">
                 <thead class="thead-dark">
                   <tr>
                     <th scope="col">#</th>
@@ -116,15 +128,17 @@
                 <div class='text-right'><span id='timer'></span><img src="img/timer.png" alt="" style='width:25px;'></div>
               </div>
               <div class="card-body">
-                <h5 class="card-title" id = 'firstLetter'>Special title treatment</h5>
+                <!-- <div class="row mb-3"> -->
+                  <h5 class="card-title" id = 'firstLetter'></h5>
+                <!-- </div> -->
                 
                 <div class='row'>
                   <!-- PLAYER input -->
                   <div class='col-12'>
-                    <div>
-                      <div><img src="img/avatar.png" style='width:50px'></div>
-                      <div id='usernameContainerGame'>Aleksandra</div>
-                    </div>
+                    <!-- <div> -->
+                      <!-- <div><img style='width:50px'></div> -->
+                      <!-- <div class="row col-7 text-right"id='usernameContainerGame'>Aleksandra</div> -->
+                    <!-- </div> -->
                     <form id='submitGame'>
                       <div class="form-group row">
                         <label for="" class='col-md-4 col-sm-12'>Država</label>
@@ -154,7 +168,7 @@
                         <label for="" class='col-md-4 col-sm-12'>Predmet</label>
                         <input type="text" class="form-control col-md-8 col-sm-12" id="objectInput">
                       </div>
-                      <button type="submit" class="btn btn-info">Submit</button>
+                      <button type="submit" class="btn btn-info" id='btnSubmit'>Potvrdi</button>
                     </form>
                   </div>
                 </div>
@@ -265,23 +279,37 @@
                         <h5>Moj profil</h5>
                         <p><a id="logOut" class="logOut" href="">Izloguj me</a></p>
                     </div>
-                    <img src="img/avatar.png" class="card-img-top mt-2" alt="Avatar" style='width:150px;margin:auto'>
+                    <img class="card-img-top mt-2" id='userAvatar' alt="Avatar" style='width:150px;margin:auto'>
                     <div class="card-body">
                     <h5 class="card-title" id='usernameContainer'></h5>
                     <h5 class="card-title" id='usernamePosition'>Rang:</h5>
                     </div>
                 </div>
-                <!-- username update form -->
+                <!-- username update avatar -->
                 <div class="card col-lg-6 col-lg-6 col-md-7 col-sm-12">
                     <div class='card-header'>
-                        <h5>Promeni korisničko ime</h5>
+                        <h5>Izaberi avatara</h5>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Korisničko ime:</h5>
-                        <form id="formUpdateUsername"  class='row mb-3'>
+                        <form id="formUpdateAvatar"  class='row mb-3 form-group'>
                             <div class='col-12'>
                                 <input type="text" readonly name="inputUsername" id="inputUsername" class='form-control mt-2'>
                             </div>
+                            <div class='col-12 row  mt-3'>
+                              <div class='col-12'>Promeni avatara</div>
+                              <select class="form-control" id="selectedAvatar">
+                                <option value = 'avatarOne'>1</option>
+                                <option value = 'avatarTwo'>2</option>
+                                <option value = 'avatarThree'>3</option>
+                                <option value = 'avatarFour'>4</option>
+                              </select>
+                              <div class='col-3 mt-4 '><img src='img/avatarOneF.png' style='width:80px;margin:auto'></div>
+                              <div class='col-3 mt-4 '><img src='img/blondeAvatar.png' style='width:80px;margin:auto'></div>
+                              <div class='col-3 mt-4 avatarThree'><img src='img/maleAvatarBrin.png' style='width:80px;margin:auto'></div>
+                              <div class='col-3 mt-4 avatarFour'><img src='img/maleAvatarGlasses.png' style='width:80px;margin:auto'></div>
+                            </div>
+                            <div class='col-12'><input type="submit" value="Potvrdi" id="btnChangeAvatar" class="btn btn-info form-control mt-2 mx-auto col-8"></div>
                         <div class="col-12">
                                 <!-- <input type="submit" value="Izmeni" id="btnUpdateUsername" class="btn btn-info form-control mt-3"> -->
                         </div>

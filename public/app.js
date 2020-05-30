@@ -26,8 +26,7 @@ let divTermError = document.querySelector('#divTermError');
 let usernameContainer = document.querySelector('#usernameContainer');
 let usernamePosition = document.querySelector('#usernamePosition');
 let inputUsername = document.querySelector('#inputUsername');
-let formUpdateUsername = document.querySelector('#formUpdateUsername');
-let divUpdatedUsername = document.querySelector('#divUpdatedUsername');
+
 let selecteSuggestCategory = document.querySelector('#selectSuggestCategory');
 let rangList = document.querySelector('#rangList');
 let profilesTab = document.querySelector('#navContentUser');
@@ -35,6 +34,7 @@ let loader = document.querySelector('.loader1');
 let logOut = document.querySelector('#logOut');
 let blurTable = document.querySelector('#blur');
 let refreshListBtn = document.querySelector('#refreshBtn');
+let userAvatar = document.querySelector('#userAvatar');
 let rangListTemplate = new QuizUI(rangList);
 
 let username = () => {
@@ -126,6 +126,13 @@ if( !username() ){
             usernameContainer.innerHTML = `${localStorage.username}`;
             var qi = new Quiz(username());
             makeRangList(qi);
+            qi.setAvatar(userAvatar);
+            if( localStorage.picture ){
+              userAvatar.setAttribute('src', `img/${localStorage.picture}`);
+            }
+            else{
+              userAvatar.setAttribute('src', `img/${localStorage.genericAvatar}`);
+            }
             
             Swal.fire({
                 title: `Dobrodošli ${result.value}!`,
@@ -147,6 +154,7 @@ if( !username() ){
   usernameContainer.innerHTML = `${localStorage.username}`;
   var qi = new Quiz(username());
   //makeRangList(qi1);
+  qi.setAvatar(userAvatar);
 }
 
 // reloadForList.addEventListener('click', e =>{
@@ -157,22 +165,34 @@ if( !username() ){
 //let qi = new Quiz(username());
 
 // update username iz input polja
-formUpdateUsername.addEventListener('submit', e => {
+let formUpdateAvatar = document.querySelector('#formUpdateAvatar');
+let divUpdatedAvatar = document.querySelector('#divUpdatedAvatar');
+
+let btnChangeAvatar = document.querySelector('#btnChangeAvatar');
+let selectedAvatar = document.querySelectorAll('#selectedAvatar');
+
+
+formUpdateAvatar.addEventListener('submit', e => {
     e.preventDefault();
     let newUsername = inputUsername.value;
+    console.log(formUpdateAvatar);
+    
+    console.log(selectedAvatar);
 
-    if( newUsername.trim().length == 0 ){
-        divUpdatedUsername.innerHTML= `<span class="alert alert-warning">Unesite korisničko ime!</span>`;
-        disapearAfter(divUpdatedUsername);
-    }else{
-        qi.updateUsername(newUsername);
-        divUpdatedUsername.innerHTML = `<span class='alert alert-success'>Vaše korisničko ime je promenjeno u <b>${newUsername}</b></span>`;
-        usernameContainer.innerHTML = `${localStorage.username}`;
-        inputUsername.setAttribute('value', `${localStorage.username}`);
-        profilesTab.innerHTML = ` ( ${localStorage.username} )`;
-        formUpdateUsername.reset();
-        disapearAfter(divUpdatedUsername);
-    }
+
+
+    // if( newUsername.trim().length == 0 ){
+    //     divUpdatedUsername.innerHTML= `<span class="alert alert-warning">Unesite korisničko ime!</span>`;
+    //     disapearAfter(divUpdatedUsername);
+    // }else{
+    //     qi.updateUsername(newUsername);
+    //     divUpdatedUsername.innerHTML = `<span class='alert alert-success'>Vaše korisničko ime je promenjeno u <b>${newUsername}</b></span>`;
+    //     usernameContainer.innerHTML = `${localStorage.username}`;
+    //     inputUsername.setAttribute('value', `${localStorage.username}`);
+    //     profilesTab.innerHTML = ` ( ${localStorage.username} )`;
+    //     formUpdateUsername.reset();
+    //     disapearAfter(divUpdatedUsername);
+    // }
 });
 
 //suggest term validation
@@ -257,129 +277,28 @@ let tableResultDiv = document.querySelector("#tableResultDiv");
 let gameInputsDiv = document.querySelector('#gameInputsDiv');
 let gameContent = document.querySelector('#gameContent');
 let tableResetButton = document.querySelector('#tableResetButton');
-let counter = 30;
+let startGameVsBot = document.querySelector('#startGameVsBot');
+let counter = 90;
 let clock;
 let testKvizaLista = document.querySelector('#testKviza');
 let clockIsSet = false;
 // let arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
-let arrayLetters = ["A"];
+let arrayLetters = ["A", "B", "G"];
 
-// New game button
 
 tableResetButton.addEventListener('click', e => {
   location.reload();
 });
 
-//check data after submit
-function checkData(){
-
-  // get answers from dom input
-  let country = document.querySelector("#country").value.replace(/ /g,'');
-  let city = document.querySelector("#city").value.replace(/ /g,'');
-  let river = document.querySelector("#river").value.replace(/ /g,'');
-  let mountain = document.querySelector("#mountain").value.replace(/ /g,'');
-  let animal = document.querySelector("#animal").value.replace(/ /g,'');
-  let plant = document.querySelector("#plant").value.replace(/ /g,'');
-  let objectInput = document.querySelector("#objectInput").value.replace(/ /g,'');
-
-  //put answers in array
-  let arrayAnswers = [ country, city, river, mountain, animal, plant, objectInput];
-  let game = new Game(arrayAnswers);
-  game.getCompAnswers();
-  game.filterAnswers(arrayAnswers);
-  //console.log('korisnik kucao',arrayAnswers);
-
-  let makeTableData = ( row, category, usersTerm, usersPoints, compPoints, compAnswer ) => {
-    let cell0 = row.insertCell(0);
-    let cell1 = row.insertCell(1);
-    let cell2 = row.insertCell(2);
-    let cell3 = row.insertCell(3);
-    let cell4 = row.insertCell(4);
-    cell0.innerHTML = `${category}`;
-    cell1.innerHTML = `${usersTerm}`;
-    cell2.innerHTML = `${usersPoints}`;
-    cell3.innerHTML = `${compPoints}`;
-    cell4.innerHTML = `${compAnswer}`;
-  }
-  
-  setTimeout(() => {
-    startGameDiv.classList.add('d-none');
-    tableResultDiv.classList.remove('d-none');
-    gameInputsDiv.classList.add('d-none');
-    let usersFinal = [localStorage.userAnswer0, localStorage.userAnswer1, localStorage.userAnswer2, localStorage.userAnswer3, localStorage.userAnswer4, localStorage.userAnswer5, localStorage.userAnswer6];
-    let compAnswers = [localStorage.compAnswer0, localStorage.compAnswer1, localStorage.compAnswer2, localStorage.compAnswer3, localStorage.compAnswer4, localStorage.compAnswer5, localStorage.compAnswer6];
-    let categories = game.categories;
-    let userPoints = 0;
-    let compPoints = 0;
-    let usernameResultTable = document.querySelector('#usernameResultTable');
-    let tableResult = document.querySelector('#tableResult');
-    usernameResultTable.innerHTML = `${localStorage.username}`;
-    // compare values
-    usersFinal.forEach( (elem, index) => {
-      let row = tableResult.insertRow(index);
-      if ( elem != 'Empty' && compAnswers[index] != 'Empty' ){
-        if( elem !=  compAnswers[index]){
-          userPoints += 10;
-          compPoints += 10;
-          makeTableData(row, categories[index], usersFinal[index], 10, 10, compAnswers[index]);
-        }else{
-          userPoints += 5;
-          compPoints += 5;
-          makeTableData(row, categories[index], usersFinal[index], 5, 5, compAnswers[index]);
-        }
-      } else if( elem == 'Empty' && compAnswers[index] == 'Empty' ){
-          userPoints += 0;
-          compPoints += 0;
-          makeTableData(row, categories[index], usersFinal[index], 0, 0, compAnswers[index]);
-      } else {
-        if( elem == 'Empty' &&  compAnswers[index] != 'Empty' ){
-          compPoints += 15;
-          makeTableData(row, categories[index], usersFinal[index], 0, 15, compAnswers[index]);
-        } else {
-          userPoints += 15;
-          makeTableData(row, categories[index], usersFinal[index], 15, 0, compAnswers[index]);
-        }
-      }
-    });
-
-    let row = tableResult.insertRow(7);
-    makeTableData(row, 'Ukupno:', '', userPoints, compPoints, '');
-
-    if( userPoints < compPoints ){
-      let row = tableResult.insertRow(8);
-      let cell0 = row.insertCell(0);
-      cell0.innerHTML = 'Izgubili ste!!!';
-    } else if( userPoints > compPoints ){
-      let row = tableResult.insertRow(8);
-      let cell0 = row.insertCell(0);
-      cell0.innerHTML = `Cestitamo ${localStorage.username}!!! Pobedili ste!!`;
-    } else{
-      let row = tableResult.insertRow(8);
-      let cell0 = row.insertCell(0);
-      cell0.innerHTML = `Nereseno!!!`;
-    }
-
-    console.log('korisnik FILTRIRANI1',usersFinal);
-    console.log('komp FILTRIRANI1',compAnswers);
-  }, 3000);  
-
-}
-
-
-//submit game / clear interval
-submitGame.addEventListener('submit' , e => {
-  e.preventDefault();
-  clearInterval(clock);
-  clockIsSet = false;
-  timer.classList.remove('timer');
-  timer.innerHTML = '';
-  checkData();
+startGame.addEventListener( 'click', () => {
+  vsWho.classList.add('d-block');
 });
-  
+
 //start game / set timer / define first letter
-startGame.addEventListener('click', () => {
+startGameVsBot.addEventListener('click', () => {
   startGameDiv.classList.add('d-none');
   tableResultDiv.classList.add('d-none');
+  vsWho.classList.add('d-none');
   gameInputsDiv.classList.remove('d-none');
   gameContent.classList.remove('d-none');
   const randomElement = arrayLetters[Math.floor(Math.random() * arrayLetters.length)];
@@ -404,5 +323,147 @@ startGame.addEventListener('click', () => {
       }, 1000);
   }
 });
+
+//submit game / clear interval
+submitGame.addEventListener('submit' , e => {
+  e.preventDefault();
+  clearInterval(clock);
+  clockIsSet = false;
+  timer.classList.remove('timer');
+  timer.innerHTML = '';
+  checkData();
+});
+
+//check data after submit
+function checkData(){
+
+  // get answers from dom input
+  let country = document.querySelector("#country").value.replace(/ /g,'');
+  let city = document.querySelector("#city").value.replace(/ /g,'');
+  let river = document.querySelector("#river").value.replace(/ /g,'');
+  let mountain = document.querySelector("#mountain").value.replace(/ /g,'');
+  let animal = document.querySelector("#animal").value.replace(/ /g,'');
+  let plant = document.querySelector("#plant").value.replace(/ /g,'');
+  let objectInput = document.querySelector("#objectInput").value.replace(/ /g,'');
+  
+  //put answers in array
+  let arrayAnswers = [ country, city, river, mountain, animal, plant, objectInput];
+  var game = new Game(arrayAnswers);
+  let myArray = [];
+ 
+  game.filterAnswers(arrayAnswers, data => {
+    myArray = data;
+  });
+
+  let finalResult = [];
+
+  myArray.forEach( (elem,index) => {
+      game.ifAnswerExist( game.capitalizeLetterTerm(elem), game.categories[index], myData => {
+        let term = elem;
+        let category = game.categories[index];
+        game.getCompAnswers(category, compData => {
+          finalResult.push(game.calculateScore(term, category, myData, compData));
+          if( index == myArray.length-1) {
+            printData(finalResult);
+          }
+        });
+      });
+  });
+
+  let printData = (dataAll) => {
+    startGameDiv.classList.add('d-none');
+    tableResultDiv.classList.remove('d-none');
+    gameInputsDiv.classList.add('d-none');
+    
+    let tableResult = document.querySelector('#tableResult');
+    let usernameResultTable = document.querySelector('#usernameResultTable');
+    usernameResultTable.innerHTML = `${localStorage.username}`;
+
+    let userPoints = 0;
+    let compPoints = 0;
+    // console.log(dataAll);
+    
+    dataAll.forEach( (elem,index) => {
+      console.log('ćydravooooooooooooooo');
+      //let row = tableResult.insertRow(index);
+      userPoints += elem.player.score;
+      compPoints += elem.computer.score;
+      console.log(elem.player);
+      console.log(index);
+      makeTableRow( tableResult, index , game.categories[index], elem.player.answer, elem.player.score,elem.computer.score, elem.computer.answer);
+    });
+
+    resultRow(7, userPoints, compPoints);
+    isWinner(userPoints, compPoints); 
+    submitGame.reset();
+  }
+
+  let makeTableRow = ( tableResult, index , category, usersTerm, usersPoints, compPoints, compAnswer ) => {
+    //let tableResult = document.querySelector('#tableResult');
+    let row = tableResult.insertRow(index);
+    let cell0 = row.insertCell(0);
+    let cell1 = row.insertCell(1);
+    let cell2 = row.insertCell(2);
+    let cell3 = row.insertCell(3);
+    let cell4 = row.insertCell(4);
+    cell0.innerHTML = `<b>${category}</b>`;
+    cell0.classList.add('cell-width-term');
+    cell1.innerHTML = `${usersTerm}`;
+    cell1.classList.add('cell-width-answer');
+    cell2.innerHTML = `${usersPoints}`;
+    cell2.classList.add('cell-width-points');
+    cell3.innerHTML = `${compPoints}`;
+    cell3.classList.add('cell-width-points');
+    cell4.innerHTML = `${compAnswer}`;
+    cell4.classList.add('cell-width-answer');
+  }
+
+  let addExtraRowPicture = (rowNumb, cellNumb, text, picture) => {
+    let tableResult = document.querySelector('#tableResult');
+    let row = tableResult.insertRow(rowNumb);
+    let cell = row.insertCell(cellNumb);
+    cell.setAttribute('colspan','5');
+    cell.innerHTML = `<img src='img/${picture}.png' style='width:50px !important'><b>${text}</b>`;
+  } 
+
+  let resultRow = (rowNumb, userResult, compResult) => {
+    let tableResult = document.querySelector('#tableResult');
+    let row = tableResult.insertRow(rowNumb);
+    row.classList.add('bg-light');
+    let cell0 = row.insertCell(0);
+    cell0.innerHTML = ``;
+    let cell1 = row.insertCell(1);
+    cell1.innerHTML = `<b>Ukupno:</b>`;
+    let cell2 = row.insertCell(2);
+    cell2.innerHTML = `<b>${userResult}</b>`;
+    let cell3 = row.insertCell(3);
+    cell3.innerHTML = `<b>${compResult}</b>`;
+    let cell4 = row.insertCell(4);
+    cell4.innerHTML = ``;
+  } 
+
+  let isWinner = (userPoints, compPoints) => {
+    
+      if( userPoints < compPoints ){
+        let text = ' Izgubili ste!!!';
+        let picture = 'alienAngry';
+        addExtraRowPicture( 8,0,text,picture);
+        cell0.innerHTML = 'Izgubili ste!!!';
+      } else if( userPoints > compPoints ){
+        let text = ` Čestitamo!!! Pobedili ste!!!`;
+        let picture = 'alienHappy';
+        addExtraRowPicture( 8,0,text,picture);
+      } else{
+        let text = ` Nerešeno!!!`;
+        let picture = 'alienNeutral';
+        addExtraRowPicture( 8,0,text,picture);
+      }
+  }
+  
+}
+
+
+  
+
 
 

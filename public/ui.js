@@ -50,12 +50,5 @@ export class QuizUI{
         
     }
     
-
-    // clear(){
-    //     //ul listu iz  konstruktora stavljamo na prazan sring
-    //     this.list.innerHTML = '';
-    // }
-    
-  
 }
 

@@ -19,33 +19,19 @@ export class Game{
     }
 
     //filterArray answers
-    async filterAnswers(array){
-
-      //let userFilteredAnswers = [];
+    filterAnswers(array , callback){
+      let userFilteredAnswers = [];
     
       array.forEach( (elem, index) => {
         if ( elem == '' || elem == undefined){
-            //userFilteredAnswers.push('Empty');
-            localStorage.setItem(`userAnswer${index}`,`Empty`);
-            //console.log('dodato empty zbog praznog unosa');
+            userFilteredAnswers.push('Empty');
         } else if ( this.firstLetter(elem) !== localStorage.givenLetter) {
-            //console.log('dodato empty zbog pogresnog slova');
-            //userFilteredAnswers.push( 'Empty' );
-            localStorage.setItem(`userAnswer${index}`,`Empty`);
+            userFilteredAnswers.push( 'Empty' );
         } else{
-          this.ifAnswerExist( this.capitalizeLetterTerm(elem), this.categories[index], data => {
-            if( data ){
-              console.log('dodato empty zato sto pojam ne postoji', data);
-              //userFilteredAnswers.push('Empty');
-              localStorage.setItem(`userAnswer${index}`,`Empty`);
-            } else {
-              //userFilteredAnswers.push(this.capitalizeLetterTerm( elem )) ;
-              let value = this.capitalizeLetterTerm(elem);
-              localStorage.setItem(`userAnswer${index}`,`${value}`);
-            }
-          });
+          userFilteredAnswers.push( elem );
         }
       });
+      callback(userFilteredAnswers);
     }
   
     //DEFINES FIRST LETTER OF GIVEN STRING
@@ -87,52 +73,96 @@ export class Game{
     }
 
     //GET COMPUTER ANSWERS
-    getCompAnswers(){
-
-      this.categories.forEach( (category, index) => {
+    getCompAnswers(category, callback){
+      let term = false;
         let rand = this.generateRandomNumber();
-        if ( this.checkRandomNumb(rand) ){
           this.terms.where('pocetnoSlovo', '==', localStorage.givenLetter)
                 .where("kategorija", "==", category)
-                .limit(1)
+                // .limit(1)
                 .get()
-                .then( snaphot => {
-                   snaphot.forEach( doc => {
-                    //this.compAnswers.push(doc.data().pojam);
-                    console.log(doc.data());
-                        localStorage.setItem(`compAnswer${index}`,`${doc.data().pojam}`);
-                        // localStorage.setItem(`compAnswer${index}`,`Ne postoji pojam u bazi`);
-                  });
+                .then( snapshot => {
+                  let random = this.generateRandomNumber();
+                  if( random > 0.2 ){
+                    //let data = snapshot.docs[randomIndex];
+                    const randomIndex = Math.floor(Math.random() * snapshot.docs.length);
+                    let data = snapshot.docs[randomIndex];
+                    term = data && data !== undefined ? data.data().pojam : 'Empty';
+                    //console.log( '110  kkkeeeeeeeeeee' ,term);
+                  }else {
+                    term = 'Empty';
+                    //console.log( '110  kkkeeeeeeeeeee' , term);
+                  }
+                  callback(term);
               }).catch( error => {
-                 console.log(error);
+                 //console.log(term);
             });
-        }else {
-          localStorage.setItem(`compAnswer${index}`,`Empty`);
-        }  
-      });
     }
 
     //return if term is confirmed
     ifAnswerExist(term, category, callback) {
-      var y = true;
-      this.terms.where('pojam', "==", term)
+      var y = 'Empty';
+         this.terms.where('pojam', "==", term)
                 .where('pocetnoSlovo', '==', localStorage.givenLetter)
                 .where("kategorija", "==", category)
                 .get()
                 .then( snapshot => {
+                  //console.log('POJAM JEEEEE',term);
                   snapshot.docs.forEach( doc =>{
                       if(doc.data().pojam == term){
-                        y = false;
+                        y = doc.data().pojam;
                       }
                       //console.log(doc.data()); 
                   });
-                  return callback(y);
+                  callback(y);
                 })
                 .catch( error => {
                   console.log(error);
                 });
     }
-    
+
+    calculateScore( term, category, myData, compData ){
+
+      let data = {
+        player:{
+            'answer': term,
+            'category': category,
+            'score': 0,
+        },
+        computer:{
+            'answer': compData,
+            'category': category,
+            'score': 0,
+        },
+      };
+
+      if ( myData != 'Empty' && compData != 'Empty' ){
+        if( myData !=  compData){
+          data.player.score = 10;
+          data.computer.score = 10;
+        }else{
+          data.player.score = 5;
+          data.computer.score = 5;
+        }
+      } else if( myData == 'Empty' && compData == 'Empty' ){
+        data.player.score = 0;
+        data.computer.score = 0;
+        data.player.answer = 'Ne znam';
+        data.computer.answer = 'Ne znam';
+      } else {
+        if( myData == 'Empty' &&  compData != 'Empty' ){
+          data.player.score = 0;
+          data.player.answer = 'Ne znam';
+          data.computer.score = 15;
+        } else {
+          data.player.score = 15;
+          data.computer.score = 0;
+          data.computer.answer = 'Ne znam';
+        }
+      }
+
+      return data;
+    }
+
   }
   
   

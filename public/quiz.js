@@ -30,6 +30,16 @@ export class Quiz{
     localStorage.setItem('username',newUsername);
   }
 
+  //set avatar
+  setAvatar(userAvatar){
+    if( localStorage.picture ){
+      userAvatar.setAttribute('src', `img/${localStorage.picture}`);
+    }
+    else{
+      userAvatar.setAttribute('src', `img/genericAvatar.png`);
+    }
+  }
+
   //STRING CONVERSION to lower case - returns sanitized first letter
   stringConvert(string){
     let toLowerCase = string.toLowerCase();
