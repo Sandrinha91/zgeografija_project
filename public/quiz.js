@@ -33,11 +33,19 @@ export class Quiz{
   //set avatar
   setAvatar(userAvatar){
     if( localStorage.picture ){
-      userAvatar.setAttribute('src', `img/${localStorage.picture}`);
+      userAvatar.setAttribute('src', `${localStorage.picture}.png`);
     }
     else{
       userAvatar.setAttribute('src', `img/genericAvatar.png`);
     }
+  }
+
+  //changeAvatar
+  updateAvatar(newPicture, picID){
+    // console.log('NEW PICTURE', newPicture);
+    // console.log('PICTURE IDDDDD', picID);
+    localStorage.setItem('picture',newPicture);
+    localStorage.setItem('pictureID',picID);
   }
 
   //STRING CONVERSION to lower case - returns sanitized first letter

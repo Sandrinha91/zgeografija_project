@@ -37,6 +37,13 @@ let refreshListBtn = document.querySelector('#refreshBtn');
 let userAvatar = document.querySelector('#userAvatar');
 let rangListTemplate = new QuizUI(rangList);
 
+
+//avatar boxes
+let avatarOneBox = document.querySelector('#avatarOneBox');
+let avatarTwoBox = document.querySelector('#avatarTwoBox');
+let avatarThreeBox = document.querySelector('#avatarThreeBox');
+let avatarFourBox = document.querySelector('#avatarFourBox');
+
 let username = () => {
     if( localStorage.username ){
         return localStorage.username;
@@ -77,15 +84,67 @@ let makeRangList = (qi) => {
         }
       } 
     }
-  
     // array sort
     let  finalSort = rangListArray.sort(function(a, b) {
       return b[1] - a[1];
     });
-  
     // make html list template
     rangListTemplate.templateRangLI(finalSort, usernamePosition);
   });
+}
+
+//define active avatar
+let defineBorder = ( avatarImg, avatarOneBox, avatarTwoBox , avatarThreeBox, avatarFourBox) => {
+  if( avatarImg == 1){
+    avatarOneBox.classList.add('border', 'border-success');
+    avatarTwoBox.classList.remove('border', 'border-success');
+    avatarThreeBox.classList.remove('border', 'border-success');
+    avatarFourBox.classList.remove('border', 'border-success');
+  } else if ( avatarImg == 2){
+    avatarOneBox.classList.remove('border', 'border-success');
+    avatarTwoBox.classList.add('border', 'border-success');
+    avatarThreeBox.classList.remove('border', 'border-success');
+    avatarFourBox.classList.remove('border', 'border-success');
+  } else if ( avatarImg == 3){
+    avatarOneBox.classList.remove('border', 'border-success');
+    avatarTwoBox.classList.remove('border', 'border-success');
+    avatarThreeBox.classList.add('border', 'border-success');
+    avatarFourBox.classList.remove('border', 'border-success');
+  } else if ( avatarImg == 4){
+    avatarOneBox.classList.remove('border', 'border-success');
+    avatarTwoBox.classList.remove('border', 'border-success');
+    avatarThreeBox.classList.remove('border', 'border-success');
+    avatarFourBox.classList.add('border', 'border-success');
+  }
+}
+
+//update avatar
+let defineAvatar = ( avatarImg) => {
+  if( qi == undefined ){
+    let qi2 = new Quiz(localStorage.username);
+
+    if( avatarImg == 1){
+      qi2.updateAvatar('img/avatarOne', avatarImg);
+    } else if ( avatarImg == 2){
+      qi2.updateAvatar('img/avatarTwo', avatarImg);
+    } else if ( avatarImg == 3){
+      qi2.updateAvatar('img/avatarThree', avatarImg);
+    } else if ( avatarImg == 4){
+      qi2.updateAvatar('img/avatarFour', avatarImg);
+    }
+  } else {
+    if( avatarImg == 1){
+      qi.updateAvatar('img/avatarOne', avatarImg);
+    } else if ( avatarImg == 2){
+      qi.updateAvatar('img/avatarTwo', avatarImg);
+    } else if ( avatarImg == 3){
+      qi.updateAvatar('img/avatarThree', avatarImg);
+    } else if ( avatarImg == 4){
+      qi.updateAvatar('img/avatarFour', avatarImg);
+    }
+  }
+
+  
 }
 
 //succesfull login
@@ -125,13 +184,14 @@ if( !username() ){
             inputUsername.setAttribute('value', `${localStorage.username}`);
             usernameContainer.innerHTML = `${localStorage.username}`;
             var qi = new Quiz(username());
-            makeRangList(qi);
-            qi.setAvatar(userAvatar);
+            //makeRangList(qi);
+            //
             if( localStorage.picture ){
-              userAvatar.setAttribute('src', `img/${localStorage.picture}`);
+              userAvatar.setAttribute('src', `${localStorage.picture}`);
+              defineBorder( localStorage.picID, avatarOneBox, avatarTwoBox , avatarThreeBox, avatarFourBox);
             }
             else{
-              userAvatar.setAttribute('src', `img/${localStorage.genericAvatar}`);
+              userAvatar.setAttribute('src', `img/genericAvatar.png`);;
             }
             
             Swal.fire({
@@ -153,33 +213,31 @@ if( !username() ){
   inputUsername.setAttribute('value', `${localStorage.username}`);
   usernameContainer.innerHTML = `${localStorage.username}`;
   var qi = new Quiz(username());
-  //makeRangList(qi1);
   qi.setAvatar(userAvatar);
+  //console.log(localStorage.pictureID);
+  defineBorder( localStorage.pictureID, avatarOneBox, avatarTwoBox , avatarThreeBox, avatarFourBox);
 }
 
 // reloadForList.addEventListener('click', e =>{
 //   location.reload();
 // });
 
-//ovo mora da se prekopira u else iznad
-//let qi = new Quiz(username());
-
-// update username iz input polja
+// update avatar iz input polja
 let formUpdateAvatar = document.querySelector('#formUpdateAvatar');
-let divUpdatedAvatar = document.querySelector('#divUpdatedAvatar');
-
-let btnChangeAvatar = document.querySelector('#btnChangeAvatar');
+// let divUpdatedAvatar = document.querySelector('#divUpdatedAvatar');
+// let btnChangeAvatar = document.querySelector('#btnChangeAvatar');
 let selectedAvatar = document.querySelectorAll('#selectedAvatar');
 
-
+// form update
 formUpdateAvatar.addEventListener('submit', e => {
     e.preventDefault();
-    let newUsername = inputUsername.value;
-    console.log(formUpdateAvatar);
     
-    console.log(selectedAvatar);
-
-
+    let avatarImg = selectedAvatar[0].value;
+    console.log(avatarImg);
+    defineAvatar(avatarImg);
+    userAvatar.setAttribute('src', `${localStorage.picture}.png`);
+    defineBorder( avatarImg, avatarOneBox, avatarTwoBox , avatarThreeBox, avatarFourBox);
+    console.log(`${localStorage.picture}`);
 
     // if( newUsername.trim().length == 0 ){
     //     divUpdatedUsername.innerHTML= `<span class="alert alert-warning">Unesite korisničko ime!</span>`;
@@ -195,12 +253,15 @@ formUpdateAvatar.addEventListener('submit', e => {
     // }
 });
 
+
 //suggest term validation
 formSuggestTerm.addEventListener( 'submit', e =>{
     e.preventDefault();
     
     let sugestedTrim = suggestedTerm.value.replace(/ /g,'');
+    console.log(sugestedTrim);
     let category = selecteSuggestCategory.value;
+    console.log(category);
 
     let result = qi.inputValidation(sugestedTrim,divTermError,formSuggestTerm);
     disapearAfter(divTermError);
@@ -227,11 +288,11 @@ formSuggestTerm.addEventListener( 'submit', e =>{
     }
 });
 
+//blur table after insert new term
 refreshListBtn.addEventListener('click', () =>{
   location.reload();
   loader.style.display = "none";
   blurTable.classList.remove('blur');
-
 });
 
 // menu responsive
@@ -254,23 +315,16 @@ $(document).ready(function() {
   });
 });
 
-// console.log(qi.username);
-// logOut.addEventListener("click", callback ,true) 
-//         function callback () {
-//             localStorage.clear();
-//             return false;
-//         }
-
 // LOG OUT USER AND CLEAR LOCAL STORAGE ON CLICK
 logOut.addEventListener("click", () => {
   localStorage.clear();
 });
 
-// QUIZ TIME
-
+// QUIZ TIME VS COMP
 let startGame = document.querySelector("#startGame");
 let startGameDiv = document.querySelector("#startGameDiv");
 let timer = document.querySelector("#timer");
+let gameUserAvatar = document.querySelector("#gameUserAvatar");
 let submitGame = document.querySelector("#submitGame");
 let firstLetter = document.querySelector("#firstLetter");
 let tableResultDiv = document.querySelector("#tableResultDiv");
@@ -278,18 +332,15 @@ let gameInputsDiv = document.querySelector('#gameInputsDiv');
 let gameContent = document.querySelector('#gameContent');
 let tableResetButton = document.querySelector('#tableResetButton');
 let startGameVsBot = document.querySelector('#startGameVsBot');
-let counter = 90;
 let clock;
-let testKvizaLista = document.querySelector('#testKviza');
 let clockIsSet = false;
-// let arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
-let arrayLetters = ["A", "B", "G"];
-
+let arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
 
 tableResetButton.addEventListener('click', e => {
   location.reload();
 });
 
+//open div to choose option / player or comp
 startGame.addEventListener( 'click', () => {
   vsWho.classList.add('d-block');
 });
@@ -304,10 +355,13 @@ startGameVsBot.addEventListener('click', () => {
   const randomElement = arrayLetters[Math.floor(Math.random() * arrayLetters.length)];
   localStorage.setItem('givenLetter',randomElement);
   firstLetter.innerHTML = `${randomElement}`;
+  //gameUserAvatar.setAttribute('src', `${localStorage.picture}.png`);
 
-
+  let counter = 90;
+  
   if(!clockIsSet) {
     clockIsSet = true;
+    
       timer.classList.add('timer');
       timer.innerHTML = counter;
       clock = setInterval(() => {
@@ -322,6 +376,8 @@ startGameVsBot.addEventListener('click', () => {
           timer.innerHTML = counter;
       }, 1000);
   }
+
+  //setTimer();
 });
 
 //submit game / clear interval
@@ -333,6 +389,31 @@ submitGame.addEventListener('submit' , e => {
   timer.innerHTML = '';
   checkData();
 });
+
+//set interval function
+// let setTimer = () => {
+//   let clockIsSet = false;
+//   let counter = 90;
+//   let clock;
+
+//   if(!clockIsSet) {
+//     clockIsSet = true;
+    
+//       timer.classList.add('timer');
+//       timer.innerHTML = counter;
+//       clock = setInterval(() => {
+//           counter--;
+          
+//           if( counter == 0 ){
+//             timer.innerHTML = counter;
+//             clearInterval(clock);
+//             clockIsSet = false;
+//             checkData();
+//           }
+//           timer.innerHTML = counter;
+//       }, 1000);
+//   }
+// }
 
 //check data after submit
 function checkData(){
@@ -384,12 +465,12 @@ function checkData(){
     // console.log(dataAll);
     
     dataAll.forEach( (elem,index) => {
-      console.log('ćydravooooooooooooooo');
+      //console.log('ćydravooooooooooooooo');
       //let row = tableResult.insertRow(index);
       userPoints += elem.player.score;
       compPoints += elem.computer.score;
-      console.log(elem.player);
-      console.log(index);
+      //console.log(elem.player);
+      //console.log(index);
       makeTableRow( tableResult, index , game.categories[index], elem.player.answer, elem.player.score,elem.computer.score, elem.computer.answer);
     });
 

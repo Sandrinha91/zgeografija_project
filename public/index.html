@@ -125,7 +125,7 @@
             </div>
             <div id="gameInputsDiv">
               <div class="card-header">
-                <div class='text-right'><span id='timer'></span><img src="img/timer.png" alt="" style='width:25px;'></div>
+                <div class='text-right'><span id='timer'></span><img src="img/timer.png" alt="" style='width:25px;' id='gameUserAvatar'></div>
               </div>
               <div class="card-body">
                 <!-- <div class="row mb-3"> -->
@@ -299,15 +299,15 @@
                             <div class='col-12 row  mt-3'>
                               <div class='col-12'>Promeni avatara</div>
                               <select class="form-control" id="selectedAvatar">
-                                <option value = 'avatarOne'>1</option>
-                                <option value = 'avatarTwo'>2</option>
-                                <option value = 'avatarThree'>3</option>
-                                <option value = 'avatarFour'>4</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
                               </select>
-                              <div class='col-3 mt-4 '><img src='img/avatarOneF.png' style='width:80px;margin:auto'></div>
-                              <div class='col-3 mt-4 '><img src='img/blondeAvatar.png' style='width:80px;margin:auto'></div>
-                              <div class='col-3 mt-4 avatarThree'><img src='img/maleAvatarBrin.png' style='width:80px;margin:auto'></div>
-                              <div class='col-3 mt-4 avatarFour'><img src='img/maleAvatarGlasses.png' style='width:80px;margin:auto'></div>
+                              <div class='col-3 mt-4 rounded' id= 'avatarOneBox'><img src='img/avatarOne.png' style='width:80px;margin:auto'></div>
+                              <div class='col-3 mt-4 rounded' id= 'avatarTwoBox'><img src='img/avatarTwo.png' style='width:80px;margin:auto'></div>
+                              <div class='col-3 mt-4 rounded' id= 'avatarThreeBox'><img src='img/avatarThree.png' style='width:80px;margin:auto'></div>
+                              <div class='col-3 mt-4 rounded' id= 'avatarFourBox'><img src='img/avatarFour.png' style='width:80px;margin:auto'></div>
                             </div>
                             <div class='col-12'><input type="submit" value="Potvrdi" id="btnChangeAvatar" class="btn btn-info form-control mt-2 mx-auto col-8"></div>
                         <div class="col-12">
