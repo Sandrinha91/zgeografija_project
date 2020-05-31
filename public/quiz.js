@@ -42,8 +42,6 @@ export class Quiz{
 
   //changeAvatar
   updateAvatar(newPicture, picID){
-    // console.log('NEW PICTURE', newPicture);
-    // console.log('PICTURE IDDDDD', picID);
     localStorage.setItem('picture',newPicture);
     localStorage.setItem('pictureID',picID);
   }
@@ -63,7 +61,7 @@ export class Quiz{
   }
 
    //capitalizeFirstLetter return full final word with first capital
-   capitalizeLetterTerm(string){
+  capitalizeLetterTerm(string){
     let firstLetter = string.slice(0,1).toUpperCase();
     let restWord = string.slice(1).toLowerCase();
     let finalWord = firstLetter + restWord;

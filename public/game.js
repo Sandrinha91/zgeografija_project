@@ -1,9 +1,11 @@
 export class Game{
   
   //constructor
-  constructor(ua){
+  constructor(ua, gm){
     this.terms = db.collection('pojmovi');
     this.userAnswers = ua;
+    this.gameMode = gm;
+    //console.log();
     //this.userFilteredAnswers = [];
     //this.compAnswers = [];
     this.categories = ['Država', 'Grad', 'Reka', 'Planina', 'Životinja', 'Biljka', 'Predmet'];
@@ -21,13 +23,16 @@ export class Game{
     //filterArray answers
     filterAnswers(array , callback){
       let userFilteredAnswers = [];
+      const regexp = /^[0-9]*[A-Za-z\šđčžćŠĐŽČĆ]+$/;
     
       array.forEach( (elem, index) => {
         if ( elem == '' || elem == undefined){
-            userFilteredAnswers.push('Empty');
-        } else if ( this.firstLetter(elem) !== localStorage.givenLetter) {
-            userFilteredAnswers.push( 'Empty' );
-        } else{
+          userFilteredAnswers.push('Empty');
+        } else if ( this.firstLetter(elem) !== localStorage.givenLetter ) {
+          userFilteredAnswers.push( 'Empty' );
+        } else if ( !regexp.test(elem) ) {
+          userFilteredAnswers.push( 'Empty' );
+        }else{
           userFilteredAnswers.push( elem );
         }
       });
@@ -74,7 +79,7 @@ export class Game{
 
     //GET COMPUTER ANSWERS
     getCompAnswers(category, callback){
-      let term = false;
+      let term = 'Empty';
         let rand = this.generateRandomNumber();
           this.terms.where('pocetnoSlovo', '==', localStorage.givenLetter)
                 .where("kategorija", "==", category)
@@ -82,15 +87,10 @@ export class Game{
                 .get()
                 .then( snapshot => {
                   let random = this.generateRandomNumber();
-                  if( random > 0.2 ){
-                    //let data = snapshot.docs[randomIndex];
+                  if( random < this.gameMode ){
                     const randomIndex = Math.floor(Math.random() * snapshot.docs.length);
                     let data = snapshot.docs[randomIndex];
                     term = data && data !== undefined ? data.data().pojam : 'Empty';
-                    //console.log( '110  kkkeeeeeeeeeee' ,term);
-                  }else {
-                    term = 'Empty';
-                    //console.log( '110  kkkeeeeeeeeeee' , term);
                   }
                   callback(term);
               }).catch( error => {

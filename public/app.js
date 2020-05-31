@@ -332,6 +332,7 @@ let gameInputsDiv = document.querySelector('#gameInputsDiv');
 let gameContent = document.querySelector('#gameContent');
 let tableResetButton = document.querySelector('#tableResetButton');
 let startGameVsBot = document.querySelector('#startGameVsBot');
+let playMode = document.querySelector('#playMode');
 let clock;
 let clockIsSet = false;
 let arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
@@ -347,6 +348,8 @@ startGame.addEventListener( 'click', () => {
 
 //start game / set timer / define first letter
 startGameVsBot.addEventListener('click', () => {
+
+  // console.log(playMode);
   startGameDiv.classList.add('d-none');
   tableResultDiv.classList.add('d-none');
   vsWho.classList.add('d-none');
@@ -415,6 +418,19 @@ submitGame.addEventListener('submit' , e => {
 //   }
 // }
 
+let defineGameMode = ( mode ) => {
+  if( mode == 'Easy' ){
+    let gameMode = 0.5;
+    return gameMode;
+  } else if(mode == 'Medium' ){
+    let gameMode = 0.7;
+    return gameMode;
+  } else if ( mode == 'Hard' ) {
+    let gameMode = 0.9;
+    return gameMode;
+  }
+}
+
 //check data after submit
 function checkData(){
 
@@ -429,7 +445,10 @@ function checkData(){
   
   //put answers in array
   let arrayAnswers = [ country, city, river, mountain, animal, plant, objectInput];
-  var game = new Game(arrayAnswers);
+
+  //set game Mode
+  let chosenMode = defineGameMode(playMode.value);
+  var game = new Game(arrayAnswers, chosenMode);
   let myArray = [];
  
   game.filterAnswers(arrayAnswers, data => {
