@@ -214,6 +214,7 @@ if( !username() ){
   usernameContainer.innerHTML = `${localStorage.username}`;
   var qi = new Quiz(username());
   qi.setAvatar(userAvatar);
+  //makeRangList(qi);
   //console.log(localStorage.pictureID);
   defineBorder( localStorage.pictureID, avatarOneBox, avatarTwoBox , avatarThreeBox, avatarFourBox);
 }
@@ -479,7 +480,10 @@ function checkData(){
         .then(snapshot => {
             if (snapshot.size > 0) {
                 snapshot.forEach(doc => {
-                  botAnswers[index] = doc.data().pojam;
+                  let data = doc.data().pojam;
+                  let term = data && data !== undefined ? doc.data().pojam : 'Empty';
+                  //console.log(term);
+                  botAnswers[index] = term;
                   checkArray.push(true);
                 });
             }
@@ -492,7 +496,9 @@ function checkData(){
                     .get()
                     .then(snapshot => {
                         snapshot.forEach(doc => {
-                          botAnswers[index] = doc.data().pojam;
+                          let data = doc.data().pojam;
+                          let term = data && data !== undefined ? doc.data().pojam : 'Empty';
+                          botAnswers[index] = term;
                           checkArray.push(true);
                         });
                     })
