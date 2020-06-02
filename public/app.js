@@ -450,25 +450,93 @@ function checkData(){
   let chosenMode = defineGameMode(playMode.value);
   var game = new Game(arrayAnswers, chosenMode);
   let myArray = [];
+  let botAnswers = [];
+  let checkArray = [];
+  let finalResult = [];
  
   game.filterAnswers(arrayAnswers, data => {
     myArray = data;
   });
 
-  let finalResult = [];
+  game.categories.forEach( elem => {
+    let rand = game.generateRandomNumber();
+    if( rand > game.gameMode ){
+      botAnswers.push('Empty');
+    } else {
+      botAnswers.push(true);
+    }
+  });
+
+  let getBotAnswers = (category , index) => {
+
+    let key = game.terms.doc().id;
+    game.terms
+        .where('kategorija', '==', category)
+        .where('pocetnoSlovo', '==', localStorage.givenLetter)
+        .where(firebase.firestore.FieldPath.documentId(), '>=', key)
+        .limit(1)
+        .get()
+        .then(snapshot => {
+            if (snapshot.size > 0) {
+                snapshot.forEach(doc => {
+                  botAnswers[index] = doc.data().pojam;
+                  checkArray.push(true);
+                });
+            }
+            else {
+                game.terms
+                    .where('kategorija', '==', category)
+                    .where('pocetnoSlovo', '==', localStorage.givenLetter)
+                    .where(firebase.firestore.FieldPath.documentId(), '<', key)
+                    .limit(1)
+                    .get()
+                    .then(snapshot => {
+                        snapshot.forEach(doc => {
+                          botAnswers[index] = doc.data().pojam;
+                          checkArray.push(true);
+                        });
+                    })
+            }
+        })
+  }
 
   myArray.forEach( (elem,index) => {
       game.ifAnswerExist( game.capitalizeLetterTerm(elem), game.categories[index], myData => {
-        let term = elem;
-        let category = game.categories[index];
-        game.getCompAnswers(category, compData => {
-          finalResult.push(game.calculateScore(term, category, myData, compData));
-          if( index == myArray.length-1) {
-            printData(finalResult);
-          }
-        });
+        // let term = elem;
+        // let category = game.categories[index];
+
+        game.userFilteredAnswers.push(myData);
+        // game.getCompAnswers(category, compData => {
+        //   finalResult.push(game.calculateScore(term, category, myData, compData));
+        //   if( index == myArray.length-1) {
+        //     printData(finalResult);
+        //   }
+        // });
+        if( index == myArray.length - 1 ){
+          botAnswers.forEach( (elem, index) => {
+            if( elem != 'Empty' ){
+              getBotAnswers( game.categories[index], index );
+            } else {
+              checkArray.push(true);
+            }
+          });
+        }
+
+
       });
   });
+
+  let checkIfIsDone = setInterval( () =>{
+    if( checkArray.length == 7 && game.userFilteredAnswers.length == 7 &&  botAnswers.length == 7){
+      clearInterval(checkIfIsDone);
+      game.categories.forEach( (category,index) => {
+        finalResult.push(game.calculateScore(myArray[index], category, game.userFilteredAnswers[index], botAnswers[index]));
+        if( finalResult.length == 7 ){
+          printData(finalResult);
+        }
+      });
+    }
+  },200 );
 
   let printData = (dataAll) => {
     startGameDiv.classList.add('d-none');
@@ -484,12 +552,8 @@ function checkData(){
     // console.log(dataAll);
     
     dataAll.forEach( (elem,index) => {
-      //console.log('ćydravooooooooooooooo');
-      //let row = tableResult.insertRow(index);
       userPoints += elem.player.score;
       compPoints += elem.computer.score;
-      //console.log(elem.player);
-      //console.log(index);
       makeTableRow( tableResult, index , game.categories[index], elem.player.answer, elem.player.score,elem.computer.score, elem.computer.answer);
     });
 
@@ -548,7 +612,6 @@ function checkData(){
         let text = ' Izgubili ste!!!';
         let picture = 'alienAngry';
         addExtraRowPicture( 8,0,text,picture);
-        cell0.innerHTML = 'Izgubili ste!!!';
       } else if( userPoints > compPoints ){
         let text = ` Čestitamo!!! Pobedili ste!!!`;
         let picture = 'alienHappy';

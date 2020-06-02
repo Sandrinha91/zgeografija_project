@@ -6,7 +6,7 @@ export class Game{
     this.userAnswers = ua;
     this.gameMode = gm;
     //console.log();
-    //this.userFilteredAnswers = [];
+    this.userFilteredAnswers = [];
     //this.compAnswers = [];
     this.categories = ['Država', 'Grad', 'Reka', 'Planina', 'Životinja', 'Biljka', 'Predmet'];
     let arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
@@ -78,25 +78,25 @@ export class Game{
     }
 
     //GET COMPUTER ANSWERS
-    getCompAnswers(category, callback){
-      let term = 'Empty';
-        let rand = this.generateRandomNumber();
-          this.terms.where('pocetnoSlovo', '==', localStorage.givenLetter)
-                .where("kategorija", "==", category)
-                // .limit(1)
-                .get()
-                .then( snapshot => {
-                  let random = this.generateRandomNumber();
-                  if( random < this.gameMode ){
-                    const randomIndex = Math.floor(Math.random() * snapshot.docs.length);
-                    let data = snapshot.docs[randomIndex];
-                    term = data && data !== undefined ? data.data().pojam : 'Empty';
-                  }
-                  callback(term);
-              }).catch( error => {
-                 //console.log(term);
-            });
-    }
+    // getCompAnswers(category, callback){
+    //   let term = 'Empty';
+    //     let rand = this.generateRandomNumber();
+    //       this.terms.where('pocetnoSlovo', '==', localStorage.givenLetter)
+    //             .where("kategorija", "==", category)
+    //             // .limit(1)
+    //             .get()
+    //             .then( snapshot => {
+    //               let random = this.generateRandomNumber();
+    //               if( random < this.gameMode ){
+    //                 const randomIndex = Math.floor(Math.random() * snapshot.docs.length);
+    //                 let data = snapshot.docs[randomIndex];
+    //                 term = data && data !== undefined ? data.data().pojam : 'Empty';
+    //               }
+    //               callback(term);
+    //           }).catch( error => {
+    //              //console.log(term);
+    //         });
+    // }
 
     //return if term is confirmed
     ifAnswerExist(term, category, callback) {
