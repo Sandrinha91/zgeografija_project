@@ -10,11 +10,13 @@
     <title>Zanimljiva Geografija | Quiz</title>
 </head>
 <body>
+
+<div id="particles-js" class="col-12"></div>
     
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-sm-start fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 mr-auto logoFont" href="#"><img src="logo.gif" alt="" class='logo-pic'> Zanimljiva Geografija</a>
+        <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 mr-auto logoFont" href="#"><img src="img/planetearth.png" alt="" class='logo-pic'> Zanimljiva Geografija</a>
         <button class="navbar-toggler align-self-start" type="button">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -63,33 +65,37 @@
     <!-- overlay menu small screen -->
     <div class="overlay"></div>
 
-    <!-- image section -->
-    <div  class='bg-image'></div>
+  <div class='container justify-content-center d-flex' style="min-height: 40%;">
 
-    <div class="tab-content">
+    <!-- image section -->
+    <!-- <div class="row">
+      <div class='bg-image col-12'></div>
+    </div> -->
+
+    <div class="tab-content col-12" style="margin-top: 20%;">
         <!-- QUIZ PAGE -->
         <div class="tab-pane active row" id="quiz" role="tabpanel" aria-labelledby="quiz-tab">
           <!-- START GAME SECTION -->
-          <div class="card mt-5 col-lg-8 col-md-10 col-sm-12 mx-auto border-0 row" id='startGameDiv'>
+          <div class="card mt-5 col-lg-8 col-md-10 col-sm-12 mx-auto border-0 row rounded-circle" id='startGameDiv'>
             <div class="row no-gutters noWrap">
               <div class="col-md-4 col-sm-4 text-right">
                 <img src="img/play.png" class="card-img" id='startGame' alt="..." style="width: 50%;">
               </div>
               <div class="col-md-8 col-sm-8">
                 <div class="card-body text-left">
-                  <h3 class="card-title letsPlay">Play a game?</h3>
+                  <h3 class="card-title letsPlay">Odigraj Kviz?</h3>
                 </div>
               </div>
             </div>
-            <div class="row no-gutters noWrap mt-2 d-none" id = 'vsWho'>
-              <div class='col-12 bg-info text-white text-center p-1 rounded'> Izaberi protivnika </div>
+            <div class="row no-gutters noWrap mt-2 d-none b-shaddow" id = 'vsWho'>
+              <div class='col-12 btn-bg text-white text-center p-1 rounded'> Izaberi protivnika </div>
               <div class="row align-items-center mt-2">
                 <form class="col-md-6 border border-top-0 border-bottom-0 border-left-0 border-info d-flex justify-content-center row">
                   <div class="form-group col-12">
                     <select class="form-control" id="playMode">
-                      <option>Easy</option>
-                      <option>Medium</option>
-                      <option>Hard</option>
+                      <option>Lako</option>
+                      <option>Srednje</option>
+                      <option>Teško</option>
                     </select>
                   </div>
                   <img src="img/bot.png" class="card-img" alt="..." style='width:80%'  id='startGameVsBot'>
@@ -113,7 +119,7 @@
 
 
           <!-- GAME SECTION -->
-          <div class="card text-center d-none mx-auto col-lg-10 text-center" id='gameContent'>
+          <div class="card text-center d-none mx-auto col-lg-10 text-center b-shaddow" id='gameContent'>
             <div id = 'tableResultDiv'>
               <table class="table text-center">
                 <thead class="thead-dark">
@@ -128,7 +134,7 @@
                 <tbody id="tableResult">
                 </tbody>
               </table>
-              <button class="btn btn-info mb-5" id="tableResetButton">Započni novu igru</button>
+              <button class="btn btn-bg text-white mb-5" id="tableResetButton">Započni novu igru</button>
             </div>
             <div id="gameInputsDiv">
               <div class="card-header">
@@ -175,7 +181,7 @@
                         <label for="" class='col-md-4 col-sm-12'>Predmet</label>
                         <input type="text" class="form-control col-md-8 col-sm-12" id="objectInput">
                       </div>
-                      <button type="submit" class="btn btn-info" id='btnSubmit'>Potvrdi</button>
+                      <button type="submit" class="btn btn-bg text-white" id='btnSubmit'>Potvrdi</button>
                     </form>
                   </div>
                 </div>
@@ -212,7 +218,7 @@
             <!-- SUGGEST CONTENT SECTION -->
             <div class="tab-content">
                 <div class="tab-pane row active" id="suggest" role="tabpanel" aria-labelledby="suggest-tab">
-                    <div class="card col-lg-7 col-lg-8 col-md-10 col-sm-12 mx-auto mt-5 text-center">
+                    <div class="card col-lg-7 col-lg-8 col-md-10 col-sm-12 mx-auto mt-5 text-center b-shaddow">
                         <!-- <img src="..." class="card-img-top" alt="..."> -->
                         <div class='card-header'>
                             <h5>Predloži pojam</h5>
@@ -235,7 +241,7 @@
                                 </select>
                                 <p class="card-title">Unesite pojam</p>
                                 <input class="form-control mt-2" id='suggestedTerm' type="text">
-                                <input type="submit" value="Potvrdi" id="btnSuggestTerm" class="btn btn-info form-control mt-2">
+                                <input type="submit" value="Potvrdi" id="btnSuggestTerm" class="btn btn-bg text-white form-control mt-2">
                             </form>
                             <div id="divTermError"></div>
                         </div>
@@ -245,7 +251,7 @@
                 <!-- RANG LIST -->
                 <div class="tab-pane row" id="top" role="tabpanel" aria-labelledby="top-tab">
                   <!-- RANG LIST CARD -->
-                  <div class="card mb-3 mt-3 col-xl-10 col-lg-10 col-md-10 col-sm-12 mx-auto">
+                  <div class="card mb-3 mt-3 col-xl-10 col-lg-10 col-md-10 col-sm-12 mx-auto b-shaddow">
                     <!-- LOADER -->
                     <div class="loader1">
                       <div class="globus"></div>
@@ -279,7 +285,7 @@
 
         <!-- MY PROFILE / UPDATE PROFILE SECTION -->
         <div class="tab-pane" id="profiles" role="tabpanel" aria-labelledby="profiles-tab">
-            <div class='row text-center mt-5'>
+            <div class='row text-center mt-5 b-shaddow'>
                 <!-- my profile page -->
                 <div class="card col-lg-6 col-lg-6 col-md-5 col-sm-12">
                     <div class='card-header'>
@@ -316,7 +322,7 @@
                               <div class='col-3 mt-4 rounded' id= 'avatarThreeBox'><img src='img/avatarThree.png' style='width:80px;margin:auto'></div>
                               <div class='col-3 mt-4 rounded' id= 'avatarFourBox'><img src='img/avatarFour.png' style='width:80px;margin:auto'></div>
                             </div>
-                            <div class='col-12'><input type="submit" value="Potvrdi" id="btnChangeAvatar" class="btn btn-info form-control mt-2 mx-auto col-8"></div>
+                            <div class='col-12'><input type="submit" value="Potvrdi" id="btnChangeAvatar" class="btn btn-bg text-white form-control mt-2 mx-auto col-8"></div>
                         <div class="col-12">
                                 <!-- <input type="submit" value="Izmeni" id="btnUpdateUsername" class="btn btn-info form-control mt-3"> -->
                         </div>
@@ -327,6 +333,7 @@
             </div>
         </div>
     </div>
+  </div>
 </div>
 
 
@@ -365,7 +372,7 @@
     <script src="sweetalert2/dist/sweetalert2.all.min.js"></script>
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script> -->
-
+    <script src="particles.js/particles.js"></script>
     <script src='app.js' type='module'></script>
 
 </body>

@@ -14,6 +14,10 @@ $(window).on("popstate", function() {
   $("a[href='" + location.hash + "']").tab("show");
 });
 
+/* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
+particlesJS.load('particles-js', 'particles.js/demo/particles.json', function() {
+  console.log('callback - particles.js config loaded');
+});
 
 import {Quiz} from "./quiz.js";
 import {QuizUI} from "./ui.js";
@@ -420,13 +424,13 @@ submitGame.addEventListener('submit' , e => {
 // }
 
 let defineGameMode = ( mode ) => {
-  if( mode == 'Easy' ){
+  if( mode == 'Lako' ){
     let gameMode = 0.5;
     return gameMode;
-  } else if(mode == 'Medium' ){
+  } else if(mode == 'Srednje' ){
     let gameMode = 0.7;
     return gameMode;
-  } else if ( mode == 'Hard' ) {
+  } else if ( mode == 'Teško' ) {
     let gameMode = 0.9;
     return gameMode;
   }
