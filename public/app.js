@@ -635,7 +635,11 @@ function checkData(){
   
 }
 
+let startGameVsPlayer = document.querySelector('#startGameVsPlayer');
 
+startGameVsPlayer.addEventListener('click', () => {
+  window.open("vsPlayer.html");
+});
   
 
 

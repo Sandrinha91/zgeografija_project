@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel='icon' href='img/favicon.png' type='image/x-icon'>
+    <title>Zanimljiva geografija | Arena</title>
+</head>
+<body>
+
+    <!-- Particles js div -->
+    <div id="particles-js" class="col-12"></div>
+
+    <!--Main game container -->
+    <div class='container-fluid'>
+        <!-- header game section -->
+        <div class='bg-dark text-center col-12'>
+            <h1 class='text-white'>ARENA</h1>
+        </div>
+
+        <!-- welcome player div -->
+        <div class='text-center btn-bg col-12 mt-auto row mt-3 mx-auto rounded text-white'>
+            <div class='row col-12'>
+                <div class='col-lg-4 col-md-5 col-sm-12'>
+                    <h3 id='usernameContainerImage'>Aleksandra</h3>
+                </div>
+                <div class='col-lg-8 col-md-7 col-sm-12'>
+                    <h3 id='usernameContainerVs'>Aleksandra</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class='row col-12 mt-3'>
+            <div class='col-8 text-center row m-auto' id='infoMessage'>
+                <h4 class='col-12' id='infoMessage'>Čekaj protivnika</h4>
+            </div>
+        </div>
+
+       
+        <!-- quiz form section and chat section -->
+        <div class="card text-center mx-auto col-lg-10 text-center b-shaddow mt-5" id='gameContent'>
+            <!-- results table -->
+            <div id = 'tableResultDivVs' class='d-none'>
+                <table class="table text-center">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" id="usernameResultTable"></th>
+                        <th scope="col">Poeni</th>
+                        <th scope="col">Poeni</th>
+                        <th scope="col">Računar</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableResult">
+                    </tbody>
+                </table>
+                <button class="btn btn-bg text-white mb-5" id="tableResetButton">Započni novu igru</button>
+            </div>
+            <div class="row justify-content-center align-items-end">
+                <!-- form input for game -->
+                <div id="gameInputVsContainer" class='col-md-8'>
+                    <div class="card-header">
+                        <div class='text-right'><span id='timer'></span><img src="img/timer.png" alt="" style='width:25px;' id='gameUserAvatar'></div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" id ='chosenLetterContainer'></h5>
+                        <div class='row'>
+                            <!-- PLAYER input -->
+                            <div class='col-12'>
+                            <!-- <div> -->
+                                <!-- <div><img style='width:50px'></div> -->
+                                <!-- <div class="row col-7 text-right"id='usernameContainerGame'>Aleksandra</div> -->
+                            <!-- </div> -->
+                                <form id='submitGame'>
+                                    <div class="form-group row">
+                                    <label for="" class='col-md-4 col-sm-12'>Država</label>
+                                    <input type="text" class="form-control col-md-8 col-sm-12" id="countryVs">
+                                    </div>
+                                    <div class="form-group row">
+                                    <label for="" class='col-md-4 col-sm-12'>Grad</label>
+                                    <input type="text" class="form-control col-md-8 col-sm-12l" id="cityVs">
+                                    </div>
+                                    <div class="form-group row">
+                                    <label for="" class='col-md-4 col-sm-12'>Reka</label>
+                                    <input type="text" class="form-control col-md-8 col-sm-12" id="riverVs">
+                                    </div>
+                                    <div class="form-group row">
+                                    <label for="" class='col-md-4 col-sm-12'>Planina</label>
+                                    <input type="text" class="form-control col-md-8 col-sm-12" id="mountainVs">
+                                    </div>
+                                    <div class="form-group row">
+                                    <label for="" class='col-md-4 col-sm-12'>Životinja</label>
+                                    <input type="text" class="form-control col-md-8 col-sm-12" id="animalVs">
+                                    </div>
+                                    <div class="form-group row">
+                                    <label for="" class='col-md-4 col-sm-12'>Biljka</label>
+                                    <input type="text" class="form-control col-md-8 col-sm-12" id="plantVs">
+                                    </div>
+                                    <div class="form-group row">
+                                    <label for="" class='col-md-4 col-sm-12'>Predmet</label>
+                                    <input type="text" class="form-control col-md-8 col-sm-12" id="objectInputVs">
+                                    </div>
+                                    <button type="submit" class="btn btn-bg text-white" id='btnSubmitVs'>Potvrdi</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- chat form and div -->
+                <div class='col-md-4 mb-5'>
+                    <!-- messages section -->
+                    <div class='col-12 bg-dark text-white'>
+                        <ul id='events' class='h-100'>
+                        </ul>
+                    </div>
+                    <!-- send message section -->
+                    <form class='form-group row' id='chat-form'>
+                        <input id='chat' class='form-control col-12'>
+                        <button class="btn btn-bg text-white col-12 mt-2" id='say'>Pošalji</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- </div> -->
+
+    <!-- main game div container ends -->
+    </div>
+    
+    <script src="particles.js/particles.js"></script>
+    <script src='client.js'></script>
+</body>
+</html>
