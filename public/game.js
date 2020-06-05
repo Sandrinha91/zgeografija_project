@@ -3,6 +3,7 @@ export class Game{
   //constructor
   constructor(ua, gm){
     this.terms = db.collection('pojmovi');
+    this.results = db.collection('rezultati');
     this.userAnswers = ua;
     this.gameMode = gm;
     //console.log();
@@ -119,6 +120,46 @@ export class Game{
                   console.log(error);
                 });
     }
+
+    //return users curent points
+    getUserPoints(username, callback) {
+      var y = [];
+         this.results
+                .where('username', "==", username)
+                .get()
+                .then( snapshot => {
+                  snapshot.docs.forEach( doc =>{
+                      if( doc.data() ){
+                        doc.data();
+                        y= [doc.data().broj_igara, doc.data().broj_poena, doc.id];
+                      }
+                  });
+                  callback(y);
+                })
+                .catch( error => {
+                  console.log(error);
+                });
+    }
+
+    // Update user points and no of games
+
+  updateData(points, games, id) {
+
+    let dateTmp = new Date(); 
+
+    this.results.doc(id).update({
+          broj_igara: games,
+          broj_poena:points,
+          datum:dateTmp
+      })
+      .then(function() {
+          console.log("Document successfully updated!");
+      })
+      .catch(function(error) {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+      });
+  }
 
     calculateScore( term, category, myData, compData ){
 

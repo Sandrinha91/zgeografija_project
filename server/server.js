@@ -15,7 +15,7 @@ let waitingPlayer = null;
 
 io.on( 'connection', (sock) =>{
     console.log('someone connected');
-    sock.emit('message', 'Hi, you are connected');
+    // sock.emit('message', 'Hi, you are connected');
 
     if( waitingPlayer ){
         //start a game

@@ -49,6 +49,31 @@ export class QuizUI{
         });
         
     }
+
+    //make li rang list template
+    templateTopThree(data){
+        let counter = 1;
+        data.forEach(e => {
+            
+            let rangLI = document.createElement('li');
+            if( e.username == localStorage.username ){
+                rangLI.classList.add('me', "list-group-item", "d-flex", "justify-content-between", "align-items-center");
+            }else{
+                rangLI.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
+            }
+            
+            rangLI.innerHTML = `<span><img src='img/${counter}.png' style="width:40px;height:40px;"></span><b> ${e.username} </b> <span class="badge badge-info badge-pill">${e.broj_poena}</span>`;
+            
+            this.list.appendChild(rangLI);
+            counter++;
+        });
+        
+    }
+
+    clear(){
+        //ul listu iz  konstruktora stavljamo na prazan sring
+        this.list.innerHTML = '';
+    }
     
 }
 

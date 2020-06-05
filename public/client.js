@@ -2,6 +2,11 @@
 particlesJS.load('particles-js', 'particles.js/demo/particles.json', function() {
     console.log('callback - particles.js config loaded');
   });
+
+  window.onbeforeunload = function() {
+    window.location.replace("http://localhost:8080/vsPlayer.html");
+    };
+
 import {Game} from "./game.js";
 const sock = io();
 
@@ -221,20 +226,61 @@ let printData = (dataAll) => {
     let tableResult = document.querySelector('#tableResult');
     let usernameResultTable = document.querySelector('#usernameResultTable');
     let usernameResultTable2 = document.querySelector('#usernameResultTable2');
-
+    let array = [];
     let userPoints = 0;
     let player2Points = 0;
     // console.log(dataAll);
     let categories = ['Država', 'Grad', 'Reka', 'Planina', 'Životinja', 'Biljka', 'Predmet'];
+
+    usernameResultTable.innerText = `${dataAll[0].player.username}`;
+    usernameResultTable2.innerText = `${dataAll[0].player2.username}`;
+
     dataAll.forEach( (elem,index) => {
       userPoints += elem.player.score;
       player2Points += elem.player2.score;
       makeTableRow( tableResult, index , categories[index], elem.player.answer, elem.player.score,elem.player2.score, elem.player2.answer);
+      console.log(dataAll);
+      if(index == 6){
+        let game = new Game(array,'Easy');
+        game.getUserPoints(localStorage.username, (data) =>{
+            console.log(data);
+            let arrPlayerOne = [userPoints, elem.player.username];
+            let arrPlayerTwo = [player2Points, elem.player2.username];
+            //console.log(sock.id);
+
+            if( arrPlayerOne[1] == localStorage.username ){
+                console.log(arrPlayerOne);
+                let finalResultP1 = data[1] + arrPlayerOne[0];
+                let finalGamePlayedP1 = data[0] + 1;
+                console.log(finalResultP1);
+                console.log(finalGamePlayedP1);
+                game.updateData(finalResultP1, finalGamePlayedP1, data[2]);
+            } else if( arrPlayerTwo[1] == localStorage.username ){
+                console.log(arrPlayerTwo);
+                let finalResultP2 = data[1] + arrPlayerTwo[0];
+                let finalGamePlayedP2 = data[0] + 1;
+                console.log(finalResultP2); 
+                console.log(finalGamePlayedP2);
+                game.updateData(finalResultP2, finalGamePlayedP2, data[2]); 
+            }
+
+            //console.log();
+        });
+      }
     });
 
     resultRow(7, userPoints, player2Points);
+
+    
     //submitGame.reset();
 }
 
+// let updateData = (data) => {
+
+// }
+
+
+
 //display results on event
 sock.on('displayResults', printData);
+//sock.on('displayResults', updateData);

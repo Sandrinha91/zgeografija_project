@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <link rel="stylesheet" href="style.css">
     <link rel='icon' href='img/favicon.png' type='image/x-icon'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
     <title>Zanimljiva Geografija | Quiz</title>
 </head>
 <body>
@@ -50,11 +51,11 @@
                 <a class="dropdown-item" href="#">Something else here</a>
               </div> -->
             </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            <li class="nav-item" id='rules'>
+              <a class="nav-link text-white"><i class="far fa-question-circle"></i> Pravila igre</a>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0 align-self-stretch">
+          <!-- <form class="form-inline my-2 my-lg-0 align-self-stretch">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
             <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
           </form> -->
@@ -203,11 +204,11 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="top-tab" data-toggle="tab" href="#top" role="tab" aria-controls="top"
-                        aria-selected="false">Rang lista</a>
+                        aria-selected="false">Dvorana slavnih - kreativci</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="rang-tab" data-toggle="tab" href="#rang" role="tab" aria-controls="rang"
-                        aria-selected="false">Lista 2</a>
+                    <a class="nav-link rangList" id="rang-tab" data-toggle="tab" href="#rang" role="tab" aria-controls="rang"
+                        aria-selected="false">Dvorana slavnih - najbolji igrači</a>
                 </li>
                 <!-- <li class="nav-item">
                     <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings"
@@ -259,7 +260,7 @@
                       <button id="refreshBtn" class="btn btn-info text-white btnRefresh">Osveži listu</button>
                     </div>
                     <div class='card-header text-center'>
-                      <h3>Dvorana slavnih</h3>
+                      <h3>Dvorana slavnih - kreativci</h3>
                     </div>
                     <div class="row no-gutters" id="blur">
                       <div class="col-md-4 d-flex">
@@ -269,7 +270,6 @@
                         <div class="card-body">
                           <h5 class="card-title"></h5>
                           <ul id='rangList' class="list-group">
-
                           </ul>
                         </div>
                       </div>
@@ -278,8 +278,29 @@
                   
                 </div>
 
-                <!-- LIST 2 -->
-                <div class="tab-pane" id="rang" role="tabpanel" aria-labelledby="rang-tab">RANG LISTA 2</div>
+                <!--TOP 3 PLAYERS -->
+                <div class="tab-pane topThree" id="rang" role="tabpanel" aria-labelledby="rang-tab">
+
+                  <!-- TOP 3 LIST CARD -->
+                  <div class="card mb-3 mt-3 col-xl-10 col-lg-10 col-md-10 col-sm-12 mx-auto b-shaddow">
+                    <div class='card-header text-center'>
+                      <h3>Dvorana slavnih - najbolji igrači</h3>
+                    </div>
+                    <div class="row no-gutters" id="blur">
+                      <div class="col-md-4 d-flex">
+                        <img src="img/gold_cup.png" class="card-img w-75 m-auto gold-cup" alt="...">
+                      </div>
+                      <div class="col-md-8">
+                        <div class="card-body">
+                          <h5 class="card-title"></h5>
+                          <ul id='rangListContest' class="list-group">
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
             </div>
         </div>
 
@@ -374,6 +395,13 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script> -->
     <script src="particles.js/particles.js"></script>
     <script src='app.js' type='module'></script>
+
+  <footer class="fixed-bottom col-12 bg-dark">
+    <div class='text-center text-white mt-1'>
+      <h6 class='p-1 pb-2'>Aleksandra Velev <a href='https://itbootcamp.rs/' target='_blank'><span class='bg-white text-white rounded ml-2 p-1'><span class='bg-warning text-white ml-2 p-1'>IT</span> <span class='text-dark'>Bootcamp Niš</span><span></a></h6>
+      <div> <p> <a href='https://github.com/Sandrinha91?tab=repositories' target='_blank'>GitHub </a> | <a href='https://www.linkedin.com/in/aleksandra-velev-621a52191/' target='_blank'> LinkedIn</a> </p> </div>
+    </div>
+  </footer>
 
 </body>
 </html>

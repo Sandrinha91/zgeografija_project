@@ -2,11 +2,11 @@ class vsPlayer {
     constructor(p1, p2){
         this._players = [p1, p2];
         this._turns = [null, null];
-        this._arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
-        // this._arrayLetters = ["A"];
+        //this._arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
+        this._arrayLetters = ["A"];
 
         //send mesage to players
-        this._sendToPlayers('Igra počinje za 3!');
+        this._sendToPlayers('Igra počinje za 4!');
         //this._timerFunction();
         
         this._players.forEach( (player, idx) => {
@@ -60,7 +60,7 @@ class vsPlayer {
         const turns = this._turns;
         if(turns[0] && turns[1]){
             this._getGameResult();
-            //this._turns = [null, null];
+            this._turns = [null, null];
         }
     }
 
@@ -77,15 +77,10 @@ class vsPlayer {
             } else if( index == 7 ){
                 let scoreP1 = 0;
                 let scoreP2 = 0;
-                console.log('elseeeee ifffff',finalArray);
                 finalArray.forEach( (elem, index) => {
                     scoreP1 += elem.player.score;
                     scoreP2 += elem.player2.score;
-                    console.log(scoreP1);
                     if( index == 6 ){
-                        //emit
-                        console.log(scoreP1);
-                        console.log(scoreP2);
                         if( scoreP1 < scoreP2 ){
                             this._sendResultsToPlayers(finalArray);
                             this._sendWinMessage(this._players[1], this._players[0]);
@@ -99,9 +94,7 @@ class vsPlayer {
                     }
                 });
             }
-            
         });
-    
     }
 
     _sendWinMessage(winner, loser) {

@@ -3,6 +3,7 @@ export class Quiz{
   //constructor
   constructor(u){
       this.username = u;
+      this.results = db.collection('rezultati');
       this.terms = db.collection('pojmovi');
       this.users = [];
   }
@@ -101,10 +102,6 @@ export class Quiz{
   
     let response = await this.terms.add(data);
     return response;
-    // let setDoc = this.terms.doc().set(data);
-    // return setDoc.then(res => {
-    //   console.log('Set: ', res);
-    // });
   }
 
   //check if term is confirmed
@@ -130,14 +127,12 @@ export class Quiz{
 
   //check if term is confirmed
   getAllUsers( callback ) {
-    
     this.terms.orderBy('korisnik')
               .get()
               .then( snapshot => {
                 snapshot.docs.forEach( change =>{  
                     //dodaj novu poruku jer je doslo do izmene
                     this.users.push(change.data().korisnik);
-                    
                 });
                 callback(this.users);
               })
@@ -164,8 +159,6 @@ export class Quiz{
     let term = this.capitalizeLetterTerm(termSuggested);
     let firstLetter = this.stringConvert(termSuggested);
 
-    //console.log(term);
-    //console.log(firstLetter);
     this.terms.where('pojam', "==", term)
               .where('pocetnoSlovo', '==', firstLetter)
               .where("kategorija", "==", category)
@@ -174,15 +167,68 @@ export class Quiz{
                 snapshot.docs.forEach( doc =>{
                     if(doc.data()){
                       y = false;
-                      // return y;
                     }
-                    console.log(doc.data()); 
                 });
                 callback(y);
               })
               .catch( error => {
                 console.log(error);
               });
+  }
+
+  //get top threee players
+  getTopThreePlayers(callback){
+    let y = [];
+    this.results
+              .orderBy('broj_poena', 'desc')
+              .limit(3)
+              .get()
+              .then( snapshot => {
+                snapshot.docs.forEach( docs =>{
+                    y.push(docs.data());
+                    //console.log(docs.data());
+                });
+                callback(y);
+              })
+              .catch( error => {
+                console.log(error);
+              });
+  }
+
+  //return if user exist
+  ifUserExist(username, callback) {
+    let y = false;
+    this.results
+              .where("username", "==", username)
+              .get()
+              .then( snapshot => {
+                snapshot.docs.forEach( doc =>{
+                    if(doc.data()){
+                      y = doc.data();
+                    }
+                });
+                callback(y);
+              })
+              .catch( error => {
+                console.log(error);
+              });
+  }
+
+  //insert new user in results table
+  async insertNewUser(username) {
+    let dateTmp = new Date(); 
+    
+    let data = {
+        avatar: 'img/genericAvatar',
+        avatar_id: 0,
+        username: username,
+        broj_igara: 0,
+        broj_poena: 0,
+        datum: firebase.firestore.Timestamp.fromDate(dateTmp)
+    };
+  
+    let response = await this.results.add(data);
+    return response;
   }
   
 }

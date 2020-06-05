@@ -188,14 +188,24 @@ if( !username() ){
             inputUsername.setAttribute('value', `${localStorage.username}`);
             usernameContainer.innerHTML = `${localStorage.username}`;
             var qi = new Quiz(username());
+
+            qi.ifUserExist(result.value, data => {
+              if( data ){
+                //data.avatar;
+                defineBorder( data.avatar_id, avatarOneBox, avatarTwoBox , avatarThreeBox, avatarFourBox);
+              } else {
+                userAvatar.setAttribute('src', `img/genericAvatar.png`);
+                //napravi novi dokument za korisnika
+                qi.insertNewUser( result.value );
+              }
+            });
             //makeRangList(qi);
             //
             if( localStorage.picture ){
               userAvatar.setAttribute('src', `${localStorage.picture}`);
               defineBorder( localStorage.picID, avatarOneBox, avatarTwoBox , avatarThreeBox, avatarFourBox);
-            }
-            else{
-              userAvatar.setAttribute('src', `img/genericAvatar.png`);;
+            } else{
+              userAvatar.setAttribute('src', `img/genericAvatar.png`);
             }
             
             Swal.fire({
@@ -219,7 +229,6 @@ if( !username() ){
   var qi = new Quiz(username());
   qi.setAvatar(userAvatar);
   //makeRangList(qi);
-  //console.log(localStorage.pictureID);
   defineBorder( localStorage.pictureID, avatarOneBox, avatarTwoBox , avatarThreeBox, avatarFourBox);
 }
 
@@ -398,31 +407,7 @@ submitGame.addEventListener('submit' , e => {
   checkData();
 });
 
-//set interval function
-// let setTimer = () => {
-//   let clockIsSet = false;
-//   let counter = 90;
-//   let clock;
-
-//   if(!clockIsSet) {
-//     clockIsSet = true;
-    
-//       timer.classList.add('timer');
-//       timer.innerHTML = counter;
-//       clock = setInterval(() => {
-//           counter--;
-          
-//           if( counter == 0 ){
-//             timer.innerHTML = counter;
-//             clearInterval(clock);
-//             clockIsSet = false;
-//             checkData();
-//           }
-//           timer.innerHTML = counter;
-//       }, 1000);
-//   }
-// }
-
+//define game mode
 let defineGameMode = ( mode ) => {
   if( mode == 'Lako' ){
     let gameMode = 0.5;
@@ -635,6 +620,7 @@ function checkData(){
   
 }
 
+//open vs player mode
 let startGameVsPlayer = document.querySelector('#startGameVsPlayer');
 
 startGameVsPlayer.addEventListener('click', () => {
@@ -642,5 +628,38 @@ startGameVsPlayer.addEventListener('click', () => {
 });
   
 
+//create 
+let rangListContest = document.querySelector('#rangListContest');
+let rangListTopThree = document.querySelector('.rangList');
 
+rangListTopThree.addEventListener('click', () =>{
+  
+  let topThreeList = document.querySelector('#rangListContest');
+  let ui = new QuizUI(topThreeList);
+
+  ui.clear();
+
+  qi.getTopThreePlayers( data =>{
+      ui.templateTopThree(data);
+  });
+});
+
+//rules pop up
+let rules = document.querySelector('#rules');
+
+rules.addEventListener( 'click', () => {
+  
+  Swal.fire({
+    title: 'Pravila igre',
+    text: "You won't be able to revert this!",
+    allowOutsideClick: false,
+    showClass: {
+      popup: 'animate__animated animate__fadeInDown',
+    },
+    hideClass: {
+      popup: 'animate__animated animate__fadeOutUp'
+    }
+  });
+
+});
 
