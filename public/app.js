@@ -638,7 +638,7 @@ function checkData(){
 let startGameVsPlayer = document.querySelector('#startGameVsPlayer');
 
 startGameVsPlayer.addEventListener('click', () => {
-  window.open("vsPlayer.html");
+  window.location.replace("http://localhost:8080/vsPlayer.html");
 });
   
 
