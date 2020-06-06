@@ -98,6 +98,19 @@
 
 }
 
+/* .btnSubmitVsP {
+  -webkit-animation: btnSubmitVsP 50s infinite;
+  /* animation-name: btnSubmitVsP; */
+  /* animation-duration: 50s; */
+/* }
+
+@-webkit-keyframes btnSubmitVsP {
+  0% {visibility: all;}
+  94% {visibility: all;}
+  98% {pointer-events: none;}
+  100% {pointer-events: none;}
+} */
+
 .loader1 {
   background: transparent;
     width: 100% !important;

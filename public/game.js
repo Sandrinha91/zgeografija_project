@@ -8,7 +8,7 @@ export class Game{
     this.gameMode = gm;
     //console.log();
     this.userFilteredAnswers = [];
-    //this.compAnswers = [];
+    this.userBAnswers = [];
     this.categories = ['Država', 'Grad', 'Reka', 'Planina', 'Životinja', 'Biljka', 'Predmet'];
     let arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
   }
@@ -161,49 +161,46 @@ export class Game{
       });
   }
 
-    calculateScore( term, category, myData, compData ){
-
-      let data = {
-        player:{
-            'answer': term,
-            'category': category,
-            'score': 0,
-        },
-        computer:{
-            'answer': compData,
-            'category': category,
-            'score': 0,
-        },
-      };
-
-      if ( myData != 'Empty' && compData != 'Empty' ){
-        if( myData !=  compData){
-          data.player.score = 10;
-          data.computer.score = 10;
-        }else{
-          data.player.score = 5;
-          data.computer.score = 5;
-        }
-      } else if( myData == 'Empty' && compData == 'Empty' ){
-        data.player.score = 0;
-        data.computer.score = 0;
-        data.player.answer = 'Ne znam';
-        data.computer.answer = 'Ne znam';
-      } else {
-        if( myData == 'Empty' &&  compData != 'Empty' ){
-          data.player.score = 0;
-          data.player.answer = 'Ne znam';
-          data.computer.score = 15;
-        } else {
-          data.player.score = 15;
-          data.computer.score = 0;
-          data.computer.answer = 'Ne znam';
-        }
+  //calculate score for both players
+  calculateScore( term, category, myData, compData ){
+    let data = {
+      player:{
+          'answer': term,
+          'category': category,
+          'score': 0,
+      },
+      computer:{
+          'answer': compData,
+          'category': category,
+          'score': 0,
+      },
+    };
+    if ( myData != 'Empty' && compData != 'Empty' ){
+      if( myData !=  compData){
+        data.player.score = 10;
+        data.computer.score = 10;
+      }else{
+        data.player.score = 5;
+        data.computer.score = 5;
       }
-
-      return data;
+    } else if( myData == 'Empty' && compData == 'Empty' ){
+      data.player.score = 0;
+      data.computer.score = 0;
+      data.player.answer = 'Ne znam';
+      data.computer.answer = 'Ne znam';
+    } else {
+      if( myData == 'Empty' &&  compData != 'Empty' ){
+        data.player.score = 0;
+        data.player.answer = 'Ne znam';
+        data.computer.score = 15;
+      } else {
+        data.player.score = 15;
+        data.computer.score = 0;
+        data.computer.answer = 'Ne znam';
+      }
     }
-
+    return data;
   }
+}
   
   

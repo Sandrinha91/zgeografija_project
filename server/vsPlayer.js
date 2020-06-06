@@ -1,25 +1,58 @@
 class vsPlayer {
     constructor(p1, p2){
         this._players = [p1, p2];
+        this._usernames = [null,null];
+        console.log(this._players[0].id);
+        console.log(this._players[1].id);
         this._turns = [null, null];
         //this._arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
         this._arrayLetters = ["A"];
 
         //send mesage to players
-        this._sendToPlayers('Igra počinje za 4!');
-        //this._timerFunction();
+        this._sendToPlayers('Igra počinje za 4');
         
         this._players.forEach( (player, idx) => {
             player.on('turn', (turn) => {
                 this._onTurn( idx ,turn);
             });
+            //console.log('111',this._turns);
         });
-        //[p1,p2].forEach( s => { s.emit('message', 'Igra počinje za '); });
+
+        this._players.forEach( (player, idx) => {
+            // if( this._players[0] && this._players[1] ){
+                player.on('userName', (user) => {
+                    //this._onUsername( idx ,userName);
+                    //console.log(player);
+                    console.log(user);
+                });
+            //}
+            console.log('111',this._usernames);
+        });
+
+        this._players.forEach( (player) => { 
+            player.on('disconnect', () => {
+                //io.emit('chat', 'socket OFF');
+                //console.log('SOCK!', player.id);
+                if( player.id ==  this._players[0].id){
+                    this._onTurn( 0, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Pizda'] );
+                    this._sendDiscInfoToPlayer(1, 'Get bot answers!');
+                } else {
+                    this._onTurn( 1, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Pizda'] );
+                    this._sendDiscInfoToPlayer(0, 'Get bot answers 1!');
+                   // console.log(this._turns);
+                }
+            });
+        });
     }
 
     //funkcija ya slanje poruke jednom igracu
     _sendToPlayer(playerIndex, msg){
         this._players[playerIndex].emit('message',msg);
+    }
+
+    //funkcija ya slanje poruke jednom igracu
+    _sendDiscInfoToPlayer(playerIndex, msg){
+        this._players[playerIndex].emit('playerDisconnected',msg);
     }
 
     //send message to both players
@@ -56,6 +89,13 @@ class vsPlayer {
         this._checkGameOver();
     }
 
+    // //on submited answers
+    // _onUsername(playerIndex,username){
+    //     this._usernames[playerIndex] = username;
+    //     // this._sendToPlayer(playerIndex, `You selected ${turn}`);
+    //     //this._checkGameOver();
+    // }
+
     _checkGameOver(){
         const turns = this._turns;
         if(turns[0] && turns[1]){
@@ -89,7 +129,7 @@ class vsPlayer {
                             this._sendWinMessage(this._players[0], this._players[1]);
                         } else{
                             this._sendResultsToPlayers(finalArray);
-                            this._sendDrawToPlayers('Nerešeno');
+                            this._sendDrawToPlayers('<img src="img/alienNeutral.png" style="width:40px; margin-right:5px;">Nerešeno!!!');
                         }
                     }
                 });
@@ -98,10 +138,10 @@ class vsPlayer {
     }
 
     _sendWinMessage(winner, loser) {
-        winner.emit('message', 'Čestitamo, pobedili ste!!!');
-        loser.emit('message', 'Izgubili ste!!!');
-      }
-
+        winner.emit('message', '<img src="img/alienHappy.png" style="width:40px; margin-right:5px;">Čestitamo, pobedili ste!!!');
+        loser.emit('message', '<img src="img/alienAngry.png" style="width:40px; margin-right:5px;">Izgubili ste!!!');
+    }
+    
     _calculateScore( myData, category, compData, userOne, userTwo) {
         
         let data = {

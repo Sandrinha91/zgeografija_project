@@ -7,6 +7,8 @@ particlesJS.load('particles-js', 'particles.js/demo/particles.json', function() 
     window.location.replace("http://localhost:8080/vsPlayer.html");
     };
 
+    
+
 import {Game} from "./game.js";
 const sock = io();
 
@@ -52,7 +54,7 @@ let timer = (numb) =>{
         
         clock = setInterval(() => {
             infoMessage.innerText = `Igra počinje za ${counter}`;
-            counter--;
+            
             if( counter == 0 ){
                 infoMessage.innerText = `Igra počinje za ${counter}`;
                 gameContent.classList.remove('d-none');
@@ -63,6 +65,7 @@ let timer = (numb) =>{
                 clockIsSet = false;
                 gameTimer(50);
             }
+            counter--;
             timer.innerHTML = counter;
         }, 1000);
     }
@@ -82,8 +85,8 @@ let checkData = () => {
     //put answers in array
     let arrayAnswers = [ countryVs, cityVs, riverVs, mountainVs, animalVs, plantVs, objectInputVs];
     let myArray = [];
-    let filteredAnswers = [];
-    let game = new Game(arrayAnswers,'Lako');
+    var filteredAnswers = [];
+    var game = new Game(arrayAnswers,'Lako');
     game.filterAnswers(arrayAnswers, data => {
         myArray = data;
       });
@@ -94,6 +97,7 @@ let checkData = () => {
         game.ifAnswerExist( game.capitalizeLetterTerm(elem), game.categories[index], myData => {
 
         filteredAnswers.push(myData);
+        //game.userBAnswers.push(myData);
           
         if( filteredAnswers.length == myArray.length ){
             filteredAnswers.push(localStorage.username);
@@ -263,24 +267,21 @@ let printData = (dataAll) => {
                 console.log(finalGamePlayedP2);
                 game.updateData(finalResultP2, finalGamePlayedP2, data[2]); 
             }
-
-            //console.log();
         });
       }
     });
 
     resultRow(7, userPoints, player2Points);
-
-    
-    //submitGame.reset();
 }
-
-// let updateData = (data) => {
-
-// }
-
-
 
 //display results on event
 sock.on('displayResults', printData);
 //sock.on('displayResults', updateData);
+
+//generate and upload bot answers when one player is disconnected
+sock.on('playerDisconnected', (msg) => {
+    console.log(msg);
+});
+
+//send username
+sock.emit('userName', [localStorage.username, sock.id]);

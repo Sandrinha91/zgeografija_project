@@ -30,6 +30,12 @@ io.on( 'connection', (sock) =>{
     sock.on('chat', (text) => {
         io.emit('chat', text);
     });
+
+    //sock on disconect
+    // sock.on('disconnect', () => {
+    //     io.emit('chat', 'socket OFF');
+    //     console.log('SOCK!', sock.id);
+    // });
 });
 
 //if ther is error due to conection
