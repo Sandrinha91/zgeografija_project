@@ -3,12 +3,11 @@ particlesJS.load('particles-js', 'particles.js/demo/particles.json', function() 
     console.log('callback - particles.js config loaded');
   });
 
-  window.onbeforeunload = function() {
+window.onbeforeunload = function() {
     window.location.replace("http://localhost:8080/vsPlayer.html");
-    };
+};
 
     
-
 import {Game} from "./game.js";
 const sock = io();
 
@@ -90,8 +89,8 @@ let checkData = () => {
     game.filterAnswers(arrayAnswers, data => {
         myArray = data;
       });
-    console.log(arrayAnswers);
-    console.log(myArray);
+    //console.log(arrayAnswers);
+    //console.log(myArray);
 
     myArray.forEach( (elem,index) => {
         game.ifAnswerExist( game.capitalizeLetterTerm(elem), game.categories[index], myData => {
@@ -101,7 +100,7 @@ let checkData = () => {
           
         if( filteredAnswers.length == myArray.length ){
             filteredAnswers.push(localStorage.username);
-            console.log(filteredAnswers);
+            //console.log(filteredAnswers);
             sock.emit('turn', filteredAnswers);
           }
         });
@@ -124,7 +123,11 @@ let gameTimer = (numb) =>{
         var clockOne = setInterval(() => {
             timerVs.innerText = counter;
             counter--;
+            // if( counter == 3 ){
+            //     //submitGameVs.disabled = true;
+            // }
             if( counter == 0 ){
+                
                 timerVs.innerText = counter;
                 clearInterval(clockOne);
                 clockIsSet = false;
@@ -197,14 +200,6 @@ let makeTableRow = ( tableResult, index , category, usersTerm, usersPoints, comp
     cell4.classList.add('cell-width-answer');
 }
 
-let addExtraRowPicture = (rowNumb, cellNumb, text, picture) => {
-    let tableResult = document.querySelector('#tableResult');
-    let row = tableResult.insertRow(rowNumb);
-    let cell = row.insertCell(cellNumb);
-    cell.setAttribute('colspan','5');
-    cell.innerHTML = `<img src='img/${picture}.png' style='width:50px !important'><b>${text}</b>`;
-} 
-
 let resultRow = (rowNumb, userResult, compResult) => {
     let tableResult = document.querySelector('#tableResult');
     let row = tableResult.insertRow(rowNumb);
@@ -233,7 +228,6 @@ let printData = (dataAll) => {
     let array = [];
     let userPoints = 0;
     let player2Points = 0;
-    // console.log(dataAll);
     let categories = ['Država', 'Grad', 'Reka', 'Planina', 'Životinja', 'Biljka', 'Predmet'];
 
     usernameResultTable.innerText = `${dataAll[0].player.username}`;
@@ -243,7 +237,7 @@ let printData = (dataAll) => {
       userPoints += elem.player.score;
       player2Points += elem.player2.score;
       makeTableRow( tableResult, index , categories[index], elem.player.answer, elem.player.score,elem.player2.score, elem.player2.answer);
-      console.log(dataAll);
+      //console.log(dataAll);
       if(index == 6){
         let game = new Game(array,'Easy');
         game.getUserPoints(localStorage.username, (data) =>{
@@ -256,15 +250,15 @@ let printData = (dataAll) => {
                 console.log(arrPlayerOne);
                 let finalResultP1 = data[1] + arrPlayerOne[0];
                 let finalGamePlayedP1 = data[0] + 1;
-                console.log(finalResultP1);
-                console.log(finalGamePlayedP1);
+                //console.log(finalResultP1);
+                //console.log(finalGamePlayedP1);
                 game.updateData(finalResultP1, finalGamePlayedP1, data[2]);
             } else if( arrPlayerTwo[1] == localStorage.username ){
                 console.log(arrPlayerTwo);
                 let finalResultP2 = data[1] + arrPlayerTwo[0];
                 let finalGamePlayedP2 = data[0] + 1;
-                console.log(finalResultP2); 
-                console.log(finalGamePlayedP2);
+                //console.log(finalResultP2); 
+                //console.log(finalGamePlayedP2);
                 game.updateData(finalResultP2, finalGamePlayedP2, data[2]); 
             }
         });
@@ -276,12 +270,34 @@ let printData = (dataAll) => {
 
 //display results on event
 sock.on('displayResults', printData);
-//sock.on('displayResults', updateData);
 
 //generate and upload bot answers when one player is disconnected
-sock.on('playerDisconnected', (msg) => {
-    console.log(msg);
+sock.on('playerDisconnected', (chikenPlayer) => {
+    console.log(chikenPlayer);
+    let game = new Game([],'Easy');
+
+    //get chickenPlayer doc from db, give -35 points, upodate db with new data
+    game.getUserPoints(chikenPlayer, (data) => {
+        //console.log(data);
+        let chickenPlayerGames = data[0] + 1;
+        let chickenPlayerPoints = data[1];
+        let chickenPlayerId = data[2];
+        if(chickenPlayerPoints >= 35 ){
+            chickenPlayerPoints = data[1] - 35;
+        } else {
+            chickenPlayerPoints = 0;
+        }
+        game.updateData(chickenPlayerPoints , chickenPlayerGames, chickenPlayerId); 
+    });
+
 });
 
-//send username
-sock.emit('userName', [localStorage.username, sock.id]);
+//send username on sock request
+sock.emit('userName', localStorage.username);
+
+sock.on('returnNickname', (index) =>{
+    let usernameArray = [index,localStorage.username,sock.id];
+    //console.log(index,localStorage.username,sock.id);
+    //console.log(usernameArray);
+    sock.emit('usernameArray', usernameArray);
+});

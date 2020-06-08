@@ -14,10 +14,10 @@
 
 <div id="particles-js" class="col-12"></div>
     
-<div class="container">
+<div class="container con-high">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-sm-start fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 mr-auto logoFont" href="#"><img src="img/planetearth.png" alt="" class='logo-pic'> Zanimljiva Geografija</a>
+        <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 mr-auto logoFont f-size" href="#"><img src="img/planetearth.png" alt="" class='logo-pic'> Zanimljiva Geografija</a>
         <button class="navbar-toggler align-self-start" type="button">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -66,19 +66,19 @@
     <!-- overlay menu small screen -->
     <div class="overlay"></div>
 
-  <div class='container justify-content-center d-flex' style="min-height: 40%;">
+  <div class='container justify-content-center d-flex pl-sm' style="min-height: 40%;">
 
     <!-- image section -->
     <!-- <div class="row">
       <div class='bg-image col-12'></div>
     </div> -->
 
-    <div class="tab-content col-12" style="margin-top: 20%;">
+    <div class="tab-content col-12 mtop">
         <!-- QUIZ PAGE -->
         <div class="tab-pane active row" id="quiz" role="tabpanel" aria-labelledby="quiz-tab">
           <!-- START GAME SECTION -->
-          <div class="card mt-5 col-lg-8 col-md-10 col-sm-12 mx-auto border-0 row rounded-circle" id='startGameDiv'>
-            <div class="row no-gutters noWrap">
+          <div class="card col-lg-8 col-md-10 col-sm-12 mx-auto border-0 row rounded-circle" id='startGameDiv'>
+            <div class="row no-gutters noWrap mtPlay">
               <div class="col-md-4 col-sm-4 text-right">
                 <img src="img/play.png" class="card-img" id='startGame' alt="..." style="width: 50%;">
               </div>
@@ -90,10 +90,10 @@
             </div>
             <div class="row no-gutters noWrap mt-2 d-none b-shaddow" id = 'vsWho'>
               <div class='col-12 btn-bg text-white text-center p-1 rounded'> Izaberi protivnika </div>
-              <div class="row align-items-center mt-2">
+              <div class="row align-items-center mt-2 justify-content-center">
                 <form class="col-md-6 border border-top-0 border-bottom-0 border-left-0 border-info d-flex justify-content-center row">
                   <div class="form-group col-12">
-                    <select class="form-control" id="playMode">
+                    <select class="form-control arrow-down" id="playMode">
                       <option>Lako</option>
                       <option>Srednje</option>
                       <option>Teško</option>
@@ -101,7 +101,7 @@
                   </div>
                   <img src="img/bot.png" class="card-img" alt="..." style='width:80%'  id='startGameVsBot'>
                 </form>
-              <div class="col-md-6 d-flex justify-content-center" id='startGameVsPlayer'>
+              <div class="col-md-6 d-flex justify-content-center" id='startGameVsPlayer' style='margin-top: 54px;'>
                 <img src="img/user.png" class="card-img" alt=".." style='width:60%'>
               </div>
               </div>
@@ -313,10 +313,12 @@
                         <h5>Moj profil</h5>
                         <p><a id="logOut" class="logOut" href="">Izloguj me</a></p>
                     </div>
-                    <img class="card-img-top mt-2" id='userAvatar' alt="Avatar" style='width:150px;margin:auto'>
-                    <div class="card-body">
-                    <h5 class="card-title" id='usernameContainer'></h5>
-                    <h5 class="card-title" id='usernamePosition'>Rang:</h5>
+                    <div class='card-body profile-sm'>
+                      <img class="card-img-top mt-2" id='userAvatar' alt="Avatar" style='width:150px;margin:auto'>
+                      <div class="profile-sm2">
+                        <h5 class="card-title" id='usernameContainer'></h5>
+                        <h5 class="card-title" id='usernamePosition'>Rang:</h5>
+                      </div>
                     </div>
                 </div>
                 <!-- username update avatar -->
@@ -328,20 +330,22 @@
                         <h5 class="card-title">Korisničko ime:</h5>
                         <form id="formUpdateAvatar"  class='row mb-3 form-group'>
                             <div class='col-12'>
-                                <input type="text" readonly name="inputUsername" id="inputUsername" class='form-control mt-2'>
+                                <input type="text" readonly name="inputUsername" id="inputUsername" class='form-control mt-2 m-minus'>
                             </div>
                             <div class='col-12 row  mt-3'>
                               <div class='col-12'>Promeni avatara</div>
-                              <select class="form-control" id="selectedAvatar">
+                              <select class="form-control m-minus" id="selectedAvatar">
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
                                 <option>4</option>
                               </select>
-                              <div class='col-3 mt-4 rounded' id= 'avatarOneBox'><img src='img/avatarOne.png' style='width:80px;margin:auto'></div>
-                              <div class='col-3 mt-4 rounded' id= 'avatarTwoBox'><img src='img/avatarTwo.png' style='width:80px;margin:auto'></div>
-                              <div class='col-3 mt-4 rounded' id= 'avatarThreeBox'><img src='img/avatarThree.png' style='width:80px;margin:auto'></div>
-                              <div class='col-3 mt-4 rounded' id= 'avatarFourBox'><img src='img/avatarFour.png' style='width:80px;margin:auto'></div>
+                              <div class='d-flex' style='place-content: space-evenly; margin-left:-30px; width:115%;'>
+                                <div class='mt-4 rounded' id= 'avatarOneBox'><img src='img/avatarOne.png' style='width:80px;margin:auto'></div>
+                                <div class='mt-4 rounded' id= 'avatarTwoBox'><img src='img/avatarTwo.png' style='width:80px;margin:auto'></div>
+                                <div class='mt-4 rounded' id= 'avatarThreeBox'><img src='img/avatarThree.png' style='width:80px;margin:auto'></div>
+                                <div class='mt-4 rounded' id= 'avatarFourBox'><img src='img/avatarFour.png' style='width:80px;margin:auto'></div>
+                              </div>
                             </div>
                             <div class='col-12'><input type="submit" value="Potvrdi" id="btnChangeAvatar" class="btn btn-bg text-white form-control mt-2 mx-auto col-8"></div>
                         <div class="col-12">

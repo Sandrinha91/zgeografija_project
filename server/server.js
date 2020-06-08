@@ -12,15 +12,16 @@ app.use(express.static(clientPath));
 
 const io = socketio(server);
 let waitingPlayer = null;
+let usernames = [];
 
 io.on( 'connection', (sock) =>{
     console.log('someone connected');
-    // sock.emit('message', 'Hi, you are connected');
 
     if( waitingPlayer ){
         //start a game
         new vsPlayer(waitingPlayer, sock);
         waitingPlayer=null;
+        usernames=[];
     } else{
         waitingPlayer = sock;
         waitingPlayer.emit('message', 'Uparivanje u toku!');
@@ -32,9 +33,9 @@ io.on( 'connection', (sock) =>{
     });
 
     //sock on disconect
-    // sock.on('disconnect', () => {
-    //     io.emit('chat', 'socket OFF');
-    //     console.log('SOCK!', sock.id);
+    // sock.on('userName', (data) => {
+    //     //io.emit('chat', 'socket OFF');
+    //     console.log('NICKNAME', data);
     // });
 });
 
