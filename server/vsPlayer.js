@@ -3,6 +3,7 @@ class vsPlayer {
         this._players = [p1, p2];
         this._usernames = [null,null];
         this._turns = [null, null];
+        this._timer = false;
         //console.log(this._players[0].id);
         //console.log(this._players[1].id);
         //this._arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
@@ -33,19 +34,20 @@ class vsPlayer {
 
         this._players.forEach( (player) => { 
             player.on('disconnect', () => {
-                //io.emit('chat', 'socket OFF');
-                //console.log('SOCK!', player.id);
-                if( player.id ==  this._players[0].id){
-                    //console.log(player.id);
-                    //console.log(this._usernames[0]);
-                    this._onTurn( 0, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Pizda'] );
-                    this._sendDiscInfoToPlayer(1, this._usernames[0][0]);
-                } else {
-                    //console.log(player.id);
-                    //console.log(this._usernames[1]);
-                    this._onTurn( 1, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Pizda'] );
-                    this._sendDiscInfoToPlayer(0, this._usernames[1][0]);
-                   // console.log(this._turns);
+                //IF Turns[0] ili turns[1] == null radi ovo dole
+                if( this._timer === true ){
+                    if( player.id ==  this._players[0].id){
+                        //console.log(player.id);
+                        //console.log(this._usernames[0]);
+                        this._onTurn( 0, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Pizda'] );
+                        this._sendDiscInfoToPlayer(1, this._usernames[0][0]);
+                    } else {
+                        //console.log(player.id);
+                        //console.log(this._usernames[1]);
+                        this._onTurn( 1, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Pizda'] );
+                        this._sendDiscInfoToPlayer(0, this._usernames[1][0]);
+                       // console.log(this._turns);
+                    }
                 }
             });
         });
@@ -54,6 +56,16 @@ class vsPlayer {
     //send msg to single player
     _sendToPlayer(playerIndex, msg){
         this._players[playerIndex].emit('message',msg);
+    }
+
+    //send waiting msg to single player
+    _sendWaitingMessage(playerIndex, msg){
+        this._players[playerIndex].emit('waiting',msg);
+    }
+
+    //send remove waiting msg to single player
+    _sendRemoveWaitingMessage(playerIndex, msg){
+        this._players[playerIndex].emit('remoweWaiting',msg);
     }
 
     //send msg about chicken player to active player
@@ -70,6 +82,8 @@ class vsPlayer {
     _sendToPlayers(msg) {
         const randomElement = this._arrayLetters[Math.floor(Math.random() * this._arrayLetters.length)];
         //console.log(randomElement);
+        //set timer to true
+        this._timer = true;
         
         this._players.forEach( (player) => { 
             player.emit('message', msg);
@@ -95,18 +109,26 @@ class vsPlayer {
     //on submited answers
     _onTurn(playerIndex,turn){
         this._turns[playerIndex] = turn;
-        
+        console.log('igrac koji je odigrao',playerIndex,turn);
         // this._sendToPlayer(playerIndex, `You selected ${turn}`);
-        this._checkGameOver();
+        this._checkGameOver(playerIndex);
     }
 
     //check if game is over
-    _checkGameOver(){
+    _checkGameOver(playerIndex){
         const turns = this._turns;
         if(turns[0] && turns[1]){
+            this._sendWaitingMessage(playerIndex, 'Cekaaaaaaaaaaaaaaaaajjjjjjjjjj!!!!!')
             this._getGameResult();
             this._turns = [null, null];
             this._usernames = [null,null];
+            this._timer = false;
+            //emit to waiting players to remove waiting message and display resilts
+            this._sendRemoveWaitingMessage(0, 'Pomeriiiiiiiiiiii porukuuu 0');
+            this._sendRemoveWaitingMessage(1, 'Pomeriiiiiiiiiiii porukuuu 1');
+        } else{
+            //send waiting message to waiting player
+            this._sendWaitingMessage(playerIndex, 'Cekaaaaaaaaaaaaaaaaajjjjjjjjjj!!!!!')
         }
     }
 

@@ -45,6 +45,6 @@ server.on('error', (err) =>{
 });
 
 //which port to listen
-server.listen(8080, () =>{
-    console.log('RPS STARTED on 8080');
+server.listen(5050, () =>{
+    console.log('RPS STARTED on 5050');
 });

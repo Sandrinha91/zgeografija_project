@@ -4,8 +4,8 @@ particlesJS.load('particles-js', 'particles.js/demo/particles.json', function() 
   });
 
 window.onbeforeunload = function() {
-    window.location.replace("http://localhost:8080/vsPlayer.html");
-};
+        window.location.replace("http://localhost:5050/vsPlayer.html");
+    };
 
     
 import {Game} from "./game.js";
@@ -33,13 +33,18 @@ let gameChatContainer = document.querySelector('#gameChatContainer');
 let chosenLetterContainerVs = document.querySelector('#chosenLetterContainerVs');
 let submitGameVs = document.querySelector('#submitGameVs');
 let usernameContainerVs = document.querySelector('#usernameContainerVs');
+let usernameContainerImage = document.querySelector('#usernameContainerImage');
 let tableResetButton = document.querySelector('#tableResetButton');
 
+//usernameContainerImage.innerHTML= localStorage.pic;
+
+//start new game
 tableResetButton.addEventListener('click', e => {
-    window.location.replace("http://localhost:8080/vsPlayer.html");
+    window.location.replace("http://localhost:5050/vsPlayer.html");
   });
 
 usernameContainerVs.innerText=`${localStorage.username}`;
+usernameContainerImage.setAttribute('src',`${localStorage.picture}.png`);
 
 //timer function
 let timer = (numb) =>{
@@ -301,3 +306,56 @@ sock.on('returnNickname', (index) =>{
     //console.log(usernameArray);
     sock.emit('usernameArray', usernameArray);
 });
+
+let modalFunc = (msg) => Swal.fire({
+                title: 'Vaši odgovori su prosleđeni!',
+                text: 'Molimo Vas sačekajte protivnika!',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                imageUrl: 'https://unsplash.it/400/200',
+                imageWidth: 400,
+                imageHeight: 200,
+                imageAlt: 'Custom image',
+            }).then( () => {
+                if( msg != 'Wait' ){
+
+                }
+            });
+
+
+//open modal for waitingh message
+sock.on('waiting', (msg) => {
+    console.log(msg);
+    Swal.fire({
+        title: 'Vaši odgovori su prosleđeni!',
+        text: 'Molimo Vas sačekajte protivnika!',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        imageUrl: 'https://unsplash.it/400/200',
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Custom image',
+    }).then( () => {
+        
+    });
+});
+
+//request for removing waiting message 
+sock.on('remoweWaiting', (msg) => {
+    console.log(msg);
+
+    Swal.fire({
+        title: 'Igra je završena!',
+        //text: 'Pog!',
+        allowOutsideClick: false,
+        confirmButtonText: 'Pogledaj rezultate!',
+        imageUrl: 'https://unsplash.it/400/200',
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Custom image',
+    }).then( () => {
+        
+    });
+
+});
+
