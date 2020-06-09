@@ -39,16 +39,21 @@ class vsPlayer {
                     if( player.id ==  this._players[0].id){
                         //console.log(player.id);
                         //console.log(this._usernames[0]);
-                        this._onTurn( 0, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Pizda'] );
+                        this._onTurn( 0, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Kokica'] );
                         this._sendDiscInfoToPlayer(1, this._usernames[0][0]);
                     } else {
                         //console.log(player.id);
                         //console.log(this._usernames[1]);
-                        this._onTurn( 1, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Pizda'] );
+                        this._onTurn( 1, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Kokica'] );
                         this._sendDiscInfoToPlayer(0, this._usernames[1][0]);
                        // console.log(this._turns);
                     }
-                }
+                } 
+                // else {
+                //     this._timer == false;
+                //     this._usernames = [null,null];
+                //     this._turns = [null, null];
+                // }
             });
         });
     }

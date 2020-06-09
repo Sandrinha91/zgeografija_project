@@ -12,18 +12,36 @@ app.use(express.static(clientPath));
 
 const io = socketio(server);
 let waitingPlayer = null;
-let usernames = [];
+let username;
 
 io.on( 'connection', (sock) =>{
     console.log('someone connected');
-
+    
     if( waitingPlayer ){
         //start a game
-        new vsPlayer(waitingPlayer, sock);
-        waitingPlayer=null;
-        usernames=[];
+        sock.on('userName', (data1) => {
+            if( username == data1 ){
+                waitingPlayer = sock;
+                waitingPlayer.emit('message', 'Uparivanje u toku!');
+                console.log('NICKNAME1', username);
+                console.log('NICKNAME2', data1);
+            } else {
+                console.log('NICKNAME1', username);
+                console.log('NICKNAME2', data1);
+                new vsPlayer(waitingPlayer, sock);
+                waitingPlayer=null;
+            }
+        });
+        // new vsPlayer(waitingPlayer, sock);
+        // waitingPlayer=null;
+        //usernames=[];
     } else{
         waitingPlayer = sock;
+        waitingPlayer.on('userName', (data) => {
+            //io.emit('chat', 'socket OFF');
+            console.log('NICKNAME', data);
+            username = data;
+        });
         waitingPlayer.emit('message', 'Uparivanje u toku!');
     }
 
@@ -31,12 +49,6 @@ io.on( 'connection', (sock) =>{
     sock.on('chat', (text) => {
         io.emit('chat', text);
     });
-
-    //sock on disconect
-    // sock.on('userName', (data) => {
-    //     //io.emit('chat', 'socket OFF');
-    //     console.log('NICKNAME', data);
-    // });
 });
 
 //if ther is error due to conection

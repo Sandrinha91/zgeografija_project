@@ -3,9 +3,27 @@ particlesJS.load('particles-js', 'particles.js/demo/particles.json', function() 
     console.log('callback - particles.js config loaded');
   });
 
-window.onbeforeunload = function() {
-        window.location.replace("http://localhost:5050/vsPlayer.html");
-    };
+//window.onbeforeunload = null;
+
+//window.onbeforeunload = alert('neee');
+        // Swal.fire({
+        //     title: 'Ovu stranicu nije moguće reload-ovati.',
+        //     text: "Ukoliko ste u igri vaš ukupan broj bodova biće umanjen za 35 poena!",
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#d33',
+        //     cancelButtonColor: '#3085d6',
+        //     confirmButtonText: 'Da, napusti stranicu!'
+        //   })
+        //   .then(() => {
+        //     // if (result.value) {
+        //     // //   Swal.fire(
+        //     // //     'Deleted!',
+        //     // //     'Your file has been deleted.',
+        //     // //     'success'
+        //     // //   )
+        //     // }
+        // });
 
     
 import {Game} from "./game.js";
@@ -36,7 +54,6 @@ let usernameContainerVs = document.querySelector('#usernameContainerVs');
 let usernameContainerImage = document.querySelector('#usernameContainerImage');
 let tableResetButton = document.querySelector('#tableResetButton');
 
-//usernameContainerImage.innerHTML= localStorage.pic;
 
 //start new game
 tableResetButton.addEventListener('click', e => {

@@ -648,11 +648,11 @@ rangListTopThree.addEventListener('click', () =>{
 let rules = document.querySelector('#rules');
 
 rules.addEventListener( 'click', () => {
-  
+  let hr = '<hr>';
   Swal.fire({
     title: 'Pravila igre',
-    text: "You won't be able to revert this!",
-    allowOutsideClick: false,
+    html: "* Obavezno korišćenje slova sa kukicama (ć,č,ž,š,dž). <hr> Model igač protiv kompjutera: Možete izabrati laku, srednju ili tešku igru u padajućem meniju. <hr> *Igrač koji napusti igru u modelu igrač protiv igrača, dobija 35 negativnih poena. <hr> Bodovanje: isti odgovor na kategoriju po 5 poena, različiti odgovori na kategoriju po 10 poena, ukoliko jedan igrač ne odgovori na neku kategoriju a drugi igrač odgovori na istu igrač koji je odgovorio dobija 15 poena. <hr> *Dvorana slavnih-kreativci : top 5 igrača koji su predložili najviše pojmova. <hr> * Dvorana slavnih-najbolji igrači : top 3 igrača sa najviše ostvarenim brojem bodova.",
+    //allowOutsideClick: false,
     showClass: {
       popup: 'animate__animated animate__fadeInDown',
     },
