@@ -4,6 +4,7 @@ class vsPlayer {
         this._usernames = [null,null];
         this._turns = [null, null];
         this._timer = false;
+        this._discCounter = 0;
         //console.log(this._players[0].id);
         //console.log(this._players[1].id);
         //this._arrayLetters = ["A", "B", "C", "Č", "Ć", "D", "Dž", "Đ", "E", "F", "G", "H", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "Š", "T", "U", "V", "Z", "Ž"];
@@ -34,26 +35,27 @@ class vsPlayer {
 
         this._players.forEach( (player) => { 
             player.on('disconnect', () => {
-                //IF Turns[0] ili turns[1] == null radi ovo dole
-                if( this._timer === true ){
+                if( this._timer === true && this._discCounter == 0 ){ 
                     if( player.id ==  this._players[0].id){
                         //console.log(player.id);
                         //console.log(this._usernames[0]);
+                        this._discCounter = 1;
                         this._onTurn( 0, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Kokica'] );
                         this._sendDiscInfoToPlayer(1, this._usernames[0][0]);
                     } else {
                         //console.log(player.id);
                         //console.log(this._usernames[1]);
+                        this._discCounter = 1;
                         this._onTurn( 1, ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Kokica'] );
                         this._sendDiscInfoToPlayer(0, this._usernames[1][0]);
                        // console.log(this._turns);
                     }
-                } 
-                // else {
-                //     this._timer == false;
-                //     this._usernames = [null,null];
-                //     this._turns = [null, null];
-                // }
+                } else {
+                    this._discCounter = 0;
+                    this._timer == false;
+                    this._usernames = [null,null];
+                    this._turns = [null, null];
+                }
             });
         });
     }

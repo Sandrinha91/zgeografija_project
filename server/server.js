@@ -20,7 +20,13 @@ io.on( 'connection', (sock) =>{
     if( waitingPlayer ){
         //start a game
         sock.on('userName', (data1) => {
-            if( username == data1 ){
+            if ( username == undefined ) {
+                console.log(username, 'undefineeed');
+                username = data1;
+                waitingPlayer = sock;
+                waitingPlayer.emit('message', 'Uparivanje u toku!');
+                console.log(data1, 'data1  undefineeed');
+            }else if( username == data1 ){
                 waitingPlayer = sock;
                 waitingPlayer.emit('message', 'Uparivanje u toku!');
                 console.log('NICKNAME1', username);
@@ -30,11 +36,9 @@ io.on( 'connection', (sock) =>{
                 console.log('NICKNAME2', data1);
                 new vsPlayer(waitingPlayer, sock);
                 waitingPlayer=null;
+                //
             }
         });
-        // new vsPlayer(waitingPlayer, sock);
-        // waitingPlayer=null;
-        //usernames=[];
     } else{
         waitingPlayer = sock;
         waitingPlayer.on('userName', (data) => {
