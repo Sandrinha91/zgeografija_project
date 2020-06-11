@@ -373,24 +373,26 @@ startGameVsBot.addEventListener('click', () => {
   localStorage.setItem('givenLetter',randomElement);
   firstLetter.innerHTML = `${randomElement}`;
   //gameUserAvatar.setAttribute('src', `${localStorage.picture}.png`);
-
+  let btnSubmit = document.querySelector('#btnSubmit');
   let counter = 90;
   
   if(!clockIsSet) {
     clockIsSet = true;
-    
-      timer.classList.add('timer');
-      timer.innerHTML = counter;
+
       clock = setInterval(() => {
-          counter--;
-          
+        timer.classList.add('timer');
+        timer.innerHTML = counter;
+          if ( counter == 1 ) {
+            timer.innerText = counter;
+            btnSubmit.classList.add("blockSubmit");
+          }
           if( counter == 0 ){
             timer.innerHTML = counter;
             clearInterval(clock);
             clockIsSet = false;
             checkData();
           }
-          timer.innerHTML = counter;
+          counter--;
       }, 1000);
   }
 
@@ -400,6 +402,8 @@ startGameVsBot.addEventListener('click', () => {
 //submit game / clear interval
 submitGame.addEventListener('submit' , e => {
   e.preventDefault();
+  let btnSubmit = document.querySelector('#btnSubmit');
+  btnSubmit.classList.add("blockSubmit");
   clearInterval(clock);
   clockIsSet = false;
   timer.classList.remove('timer');
@@ -651,7 +655,7 @@ rules.addEventListener( 'click', () => {
   let hr = '<hr>';
   Swal.fire({
     title: 'Pravila igre',
-    html: "* Obavezno korišćenje slova sa kukicama (ć,č,ž,š,dž). <hr> Model igač protiv kompjutera: Možete izabrati laku, srednju ili tešku igru u padajućem meniju. <hr> *Igrač koji napusti igru u modelu igrač protiv igrača, dobija 35 negativnih poena. <hr> Bodovanje: isti odgovor na kategoriju po 5 poena, različiti odgovori na kategoriju po 10 poena, ukoliko jedan igrač ne odgovori na neku kategoriju a drugi igrač odgovori na istu igrač koji je odgovorio dobija 15 poena. <hr> *Dvorana slavnih-kreativci : top 5 igrača koji su predložili najviše pojmova. <hr> * Dvorana slavnih-najbolji igrači : top 3 igrača sa najviše ostvarenim brojem bodova.",
+    html: "* <b>Karakteri :</b> Obavezno korišćenje slova sa kukicama (ć,č,ž,š,dž). <hr>* <b>Model igač protiv kompjutera :</b> Možete izabrati laku, srednju ili tešku igru u padajućem meniju. <hr> * <b>Negativni poeni :</b> Igrač koji napusti igru u modelu igrač protiv igrača, dobija 35 negativnih poena. <hr> * <b>Ne varaj :</b> Igrač koji promeni prozor u modelu igrač protiv igrača moraće da sačeka 20 sekundi kako bi se vratio u igru. <hr> * <b>Bodovanje :</b> isti odgovor na kategoriju po 5 poena, različiti odgovori na kategoriju po 10 poena, ukoliko jedan igrač ne odgovori na neku kategoriju a drugi igrač odgovori na istu igrač koji je odgovorio dobija 15 poena. <hr> * <b>Dvorana slavnih-kreativci :</b> top 5 igrača koji su predložili najviše pojmova. <hr> * <b>Dvorana slavnih-najbolji igrači :</b> top 3 igrača sa najviše ostvarenim brojem bodova.",
     //allowOutsideClick: false,
     showClass: {
       popup: 'animate__animated animate__fadeInDown',

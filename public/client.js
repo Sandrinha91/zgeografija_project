@@ -1,6 +1,6 @@
 /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
 particlesJS.load('particles-js', 'particles.js/demo/particles.json', function() {
-    console.log('callback - particles.js config loaded');
+    //console.log('callback - particles.js config loaded');
   });
 
 //window.onbeforeunload = null;
@@ -84,7 +84,7 @@ let timer = (numb) =>{
                 gameChatContainer.classList.add('d-flex');
                 clearInterval(clock);
                 clockIsSet = false;
-                gameTimer(50);
+                gameTimer(30);
             }
             counter--;
             timer.innerHTML = counter;
@@ -129,38 +129,96 @@ let checkData = () => {
     });
 }
 
+let hasFocus = () =>{
+    if (document.hasFocus()) {
+        //x.innerHTML = "The document has focus.";
+        //console.log("The document has focus.");
+        return true;
+    } else {
+        //x.innerHTML = "The document DOES NOT have focus.";
+        //console.log("The document DOES NOT have focus.");
+        return false;
+    }
+};
+
 //game timer function
 let gameTimer = (numb) =>{
     let timerVs = document.querySelector('#timerVs');
-
+    let btnSubmitVs = document.querySelector('#btnSubmitVs');
     let counter = numb;
     //var clockOne;
     let clockIsSet = false;
 
     infoMessage.innerText='';
-
+    //let timerRun = 5000;    
     if(!clockIsSet) {
         clockIsSet = true;
-        
+        let timerRun = 20000;    
         var clockOne = setInterval(() => {
+            
+            let focus = hasFocus();
+            //console.log(focus);
+            if( focus === false){
+                if ( timerRun >= 0 ){
+                    //console.log('sssssssss222222nulaaaaaaaaaaaaaaa timer', timerRun);
+                    
+                    let timerInterval;
+                    Swal.fire({
+                        title: 'Igraj fer!',
+                        // text: '',
+                        html: 'Kliknite ovde i sačekajte preostalo vreme kako bi nastavili igru! <hr> Igra se nastavlja za <b></b> .',
+                        timer: timerRun,
+                        allowOutsideClick: false,
+                        // timerProgressBar: true,
+                        onBeforeOpen: () => {
+                            Swal.showLoading();
+                            timerInterval = setInterval(() => {
+                            const content = Swal.getContent();
+                            if (content) {
+                                const b = content.querySelector('b');
+                                if (b) {
+                                    if( timerRun == 0){
+                                        //console.log("U IF",timerRun);
+                                        b.textContent = timerRun;
+                                    } else{
+                                        b.textContent = Math.ceil(Swal.getTimerLeft() / 1000);
+                                    }
+                                }
+                                timerRun = timerRun - 1000;
+                            }
+                            }, 10)
+                        },
+                        onClose: () => {
+                            clearInterval(timerInterval);
+                        }
+                    }).then(() => {
+                        //console.log('I was closed by the timer');
+                        timerRun = 20000; 
+                    })
+                }
+            }
+
+            timerVs.classList.add('timer');
             timerVs.innerText = counter;
-            counter--;
-            // if( counter == 3 ){
-            //     //submitGameVs.disabled = true;
-            // }
+            if ( counter == 1 ) {
+                timerVs.innerText = counter;
+                btnSubmitVs.classList.add("blockSubmit");
+            }
             if( counter == 0 ){
-                
                 timerVs.innerText = counter;
                 clearInterval(clockOne);
                 clockIsSet = false;
                 checkData();
             }
+            counter--;
+
         }, 1000);
     }
 
     //on quiz form submited check data
     submitGameVs.addEventListener('submit', e => {
         e.preventDefault();
+        btnSubmitVs.classList.add("blockSubmit");
         clearInterval(clockOne);
         checkData();
     });
@@ -263,20 +321,20 @@ let printData = (dataAll) => {
       if(index == 6){
         let game = new Game(array,'Easy');
         game.getUserPoints(localStorage.username, (data) =>{
-            console.log(data);
+            //console.log(data);
             let arrPlayerOne = [userPoints, elem.player.username];
             let arrPlayerTwo = [player2Points, elem.player2.username];
             //console.log(sock.id);
 
             if( arrPlayerOne[1] == localStorage.username ){
-                console.log(arrPlayerOne);
+                //console.log(arrPlayerOne);
                 let finalResultP1 = data[1] + arrPlayerOne[0];
                 let finalGamePlayedP1 = data[0] + 1;
                 //console.log(finalResultP1);
                 //console.log(finalGamePlayedP1);
                 game.updateData(finalResultP1, finalGamePlayedP1, data[2]);
             } else if( arrPlayerTwo[1] == localStorage.username ){
-                console.log(arrPlayerTwo);
+                //console.log(arrPlayerTwo);
                 let finalResultP2 = data[1] + arrPlayerTwo[0];
                 let finalGamePlayedP2 = data[0] + 1;
                 //console.log(finalResultP2); 
@@ -295,7 +353,7 @@ sock.on('displayResults', printData);
 
 //generate and upload bot answers when one player is disconnected
 sock.on('playerDisconnected', (chikenPlayer) => {
-    console.log(chikenPlayer);
+    //console.log(chikenPlayer);
     let game = new Game([],'Easy');
 
     //get chickenPlayer doc from db, give -35 points, upodate db with new data
@@ -342,16 +400,15 @@ let modalFunc = (msg) => Swal.fire({
 
 //open modal for waitingh message
 sock.on('waiting', (msg) => {
-    console.log(msg);
+    //console.log(msg);
     Swal.fire({
+        onBeforeOpen: () => {
+            Swal.showLoading();
+        },
         title: 'Vaši odgovori su prosleđeni!',
         text: 'Molimo Vas sačekajte protivnika!',
         allowOutsideClick: false,
         showConfirmButton: false,
-        imageUrl: 'https://unsplash.it/400/200',
-        imageWidth: 400,
-        imageHeight: 200,
-        imageAlt: 'Custom image',
     }).then( () => {
         
     });
@@ -359,17 +416,12 @@ sock.on('waiting', (msg) => {
 
 //request for removing waiting message 
 sock.on('remoweWaiting', (msg) => {
-    console.log(msg);
-
+    //console.log(msg);
+    
     Swal.fire({
         title: 'Igra je završena!',
-        //text: 'Pog!',
         allowOutsideClick: false,
         confirmButtonText: 'Pogledaj rezultate!',
-        imageUrl: 'https://unsplash.it/400/200',
-        imageWidth: 400,
-        imageHeight: 200,
-        imageAlt: 'Custom image',
     }).then( () => {
         
     });

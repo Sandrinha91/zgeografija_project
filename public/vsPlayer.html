@@ -14,7 +14,7 @@
     <div id="particles-js" class="col-12"></div>
 
     <!--Main game container -->
-    <div class='container-fluid'>
+    <div class='container-fluid' id='focus'>
         <!-- header game section -->
         <div class='bg-dark text-center col-12'>
             <h1 class='text-white'>ARENA</h1>
@@ -62,7 +62,7 @@
                 <!-- form input for game -->
                 <div id="gameInputVsContainer" class='col-md-8'>
                     <div class="card-header">
-                        <div class='text-right'><span id='timerVs' class="timer"></span><img src="img/timer.png" alt="" style='width:25px;' id='gameUserAvatar'></div>
+                        <div class='text-right'><span id='timerVs'></span><img src="img/timer.png" alt="" style='width:25px;' id='gameUserAvatar'></div>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title" id ='chosenLetterContainerVs'></h5>
@@ -73,7 +73,7 @@
                                 <!-- <div><img style='width:50px'></div> -->
                                 <!-- <div class="row col-7 text-right"id='usernameContainerGame'>Aleksandra</div> -->
                             <!-- </div> -->
-                                <form id='submitGameVs'>
+                                <form id='submitGameVs' onkeypress="return event.keyCode != 13;">
                                     <div class="form-group row">
                                     <label for="" class='col-md-4 col-sm-12'>Država</label>
                                     <input type="text" class="form-control col-md-8 col-sm-12" id="countryVs">
@@ -102,7 +102,7 @@
                                     <label for="" class='col-md-4 col-sm-12'>Predmet</label>
                                     <input type="text" class="form-control col-md-8 col-sm-12" id="objectInputVs">
                                     </div>
-                                    <div class="btnSubmitVsP"><button type="submit" class="btn btn-bg text-white" id='btnSubmitVs' >Potvrdi</button></div>
+                                    <div class="btnSubmitVsP"><button type="submit" class="btn btn-bg text-white" id='btnSubmitVs'>Potvrdi</button></div>
                                 </form>
                             </div>
                         </div>

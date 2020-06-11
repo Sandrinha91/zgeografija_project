@@ -168,6 +168,8 @@ select {
   100% { transform: rotate(360deg); }
 }
 
+.blockSubmit {
+  pointer-events: none;}
 
 @media (max-width: 992px) {
     .mobileMenu {

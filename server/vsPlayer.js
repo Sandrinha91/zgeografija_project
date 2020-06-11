@@ -11,7 +11,7 @@ class vsPlayer {
         this._arrayLetters = ["A"];
 
         //send mesage to players
-        this._sendToPlayers('Igra počinje za 4');
+        this._sendToPlayers('Igra počinje za 3');
         
         this._players.forEach( (player, idx) => {
             player.on('turn', (turn) => {
@@ -94,7 +94,7 @@ class vsPlayer {
         
         this._players.forEach( (player) => { 
             player.emit('message', msg);
-            player.emit('runPrepTime', 3);
+            player.emit('runPrepTime', 2);
             player.emit('firstLetter', randomElement);
         });
     }
