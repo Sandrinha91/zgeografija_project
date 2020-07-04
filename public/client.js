@@ -235,7 +235,7 @@ const onFormSubmitied = (e) => {
     e.preventDefault();
 
     const input = document.querySelector('#chat');
-    const text = input.value;
+    const text = `${localStorage.username}: ${input.value}`;
     input.value = '';
 
     sock.emit('chat', text);

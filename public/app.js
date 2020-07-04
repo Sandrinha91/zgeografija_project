@@ -447,6 +447,8 @@ function checkData(){
   let botAnswers = [];
   let checkArray = [];
   let finalResult = [];
+  console.log(game);
+  console.log(chosenMode);
  
   game.filterAnswers(arrayAnswers, data => {
     myArray = data;
